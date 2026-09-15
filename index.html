@@ -1,0 +1,1627 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>极简修真录·万法化境版</title>
+<style>
+  :root {
+    --bg: #09090b;
+    --panel: #18181b;
+    --card: #27272a;
+    --border: #3f3f46;
+    --text: #f4f4f5;
+    --subtext: #a1a1aa;
+    --accent: #38bdf8;
+    --hp: #ef4444;
+    --exp: #10b981;
+    --gold: #facc15;
+    --purple: #c084fc;
+    --red: #f43f5e;
+    --blue: #60a5fa;
+  }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    display: flex;
+    justify-content: center;
+    margin: 0;
+    padding: 12px;
+    user-select: none;
+  }
+  #app {
+    width: 100%;
+    max-width: 480px;
+    height: 94vh;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    position: relative;
+  }
+
+  .status-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .row-between { display: flex; justify-content: space-between; align-items: center; }
+  .bar-wrap {
+    height: 10px;
+    background: #27272a;
+    border-radius: 5px;
+    overflow: hidden;
+    position: relative;
+  }
+  .bar-fill { height: 100%; width: 0%; transition: width 0.3s ease; }
+  .hp-fill { background: linear-gradient(90deg, #dc2626, #ef4444); }
+  .exp-fill { background: linear-gradient(90deg, #059669, #10b981); }
+
+  .log-panel {
+    height: 100px;
+    background: #000;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 10px;
+    overflow-y: auto;
+    font-size: 12px;
+    line-height: 1.5;
+  }
+  .log-item { margin-bottom: 2px; }
+
+  .main-panel {
+    flex: 1;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 12px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .action-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+  .act-btn {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 10px;
+    color: var(--text);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+    transition: all 0.15s;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+  .act-btn:active, .act-btn.pressing { transform: scale(0.97); background: #3f3f46; border-color: var(--accent); }
+  .act-btn b { font-size: 14px; }
+  .act-btn span { font-size: 11px; color: var(--subtext); }
+  .act-break { border-color: var(--gold); background: #2e2608; }
+  .act-special { border-color: var(--accent); background: #0c2d48; }
+
+  .card-item {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 9px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+  }
+  .btn-sm {
+    background: #3f3f46;
+    color: var(--text);
+    border: 1px solid #52525b;
+    padding: 5px 10px;
+    border-radius: 6px;
+    font-size: 11.5px;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .btn-sm:active { background: #52525b; }
+  .btn-danger { background: #7f1d1d; border-color: #991b1b; }
+  .btn-danger:active { background: #991b1b; }
+
+  .tab-nav {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+  }
+  .tab-btn {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    color: var(--subtext);
+    padding: 10px 0;
+    border-radius: 8px;
+    font-size: 12px;
+    cursor: pointer;
+    font-weight: bold;
+    text-align: center;
+  }
+  .tab-btn.active {
+    background: #27272a;
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+
+  .trait-pick-card {
+    background: #18181b;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 10px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.2s;
+  }
+  .trait-pick-card.selected {
+    border-color: var(--gold);
+    background: #27220a;
+    box-shadow: 0 0 10px rgba(250, 204, 21, 0.2);
+  }
+
+  #chance-modal {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.85);
+    backdrop-filter: blur(4px);
+    z-index: 100;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 16px;
+  }
+  .chance-box {
+    background: #18181b;
+    border: 2px solid var(--gold);
+    border-radius: 12px;
+    padding: 16px;
+    width: 100%;
+    max-width: 380px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    box-shadow: 0 0 25px rgba(250, 204, 21, 0.2);
+  }
+
+  .badge-tian { background: #7f1d1d; color: #fca5a5; border: 1px solid #ef4444; }
+  .badge-di { background: #713f12; color: #fde047; border: 1px solid #eab308; }
+  .badge-xuan { background: #3b0764; color: #d8b4fe; border: 1px solid #a855f7; }
+  .badge-huang { background: #1e293b; color: #94a3b8; border: 1px solid #64748b; }
+
+  /* 功法境界微标签 */
+  .stage-tag { font-size: 10px; padding: 1px 4px; border-radius: 3px; font-weight: bold; }
+  .stage-0 { background: #27272a; color: #71717a; border: 1px solid #3f3f46; } /* 未入门 */
+  .stage-1 { background: #1e3a5f; color: #7dd3fc; border: 1px solid #38bdf8; } /* 入门 */
+  .stage-2 { background: #064e3b; color: #6ee7b7; border: 1px solid #10b981; } /* 小成 */
+  .stage-3 { background: #581c87; color: #e9d5ff; border: 1px solid #c084fc; } /* 大成 */
+  .stage-4 { background: #78350f; color: #fde047; border: 1px solid #facc15; } /* 圆满 */
+
+  .t-red { color: var(--red); }
+  .t-gold { color: var(--gold); }
+  .t-blue { color: var(--blue); }
+  .t-white { color: var(--subtext); }
+  .hidden { display: none !important; }
+
+  .equip-slot-box {
+    background: #111;
+    padding: 8px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+</style>
+</head>
+<body>
+
+<div id="app">
+  <!-- 命格 5 选 3 -->
+  <div id="view-traits" class="main-panel" style="justify-content:center;">
+    <div style="text-align:center;">
+      <h2 style="margin:0;">宿慧天轮 · 先天命格</h2>
+      <p style="font-size:12px; color:var(--subtext); margin:4px 0 8px 0;">
+        五卦显象，请钦定 <b style="color:var(--gold);">3</b> 个命格入世 (<span id="ui-pick-count" style="color:var(--gold);">0</span>/3)
+      </p>
+    </div>
+    <div id="trait-cards-container" style="display:flex; flex-direction:column; gap:6px;"></div>
+    <div style="display:flex; gap:8px; margin-top:10px;">
+      <button class="btn-sm" style="flex:1; padding:12px;" onclick="rollTraits()">重铸五卦</button>
+      <button id="btn-confirm-traits" class="btn-sm" style="flex:1; padding:12px; background:#065f46; border-color:var(--exp);" disabled onclick="confirmTraits()">结定道基 (需选3个)</button>
+    </div>
+  </div>
+
+  <!-- 选道 -->
+  <div id="view-path" class="main-panel hidden">
+    <h3 style="text-align:center; margin:0 0 10px 0;">选择证道大道</h3>
+    <div style="display:flex; flex-direction:column; gap:8px;">
+      <button class="act-btn" onclick="choosePath('练气')"><b>练气一脉</b><span>天地御剑 · 真元纵横</span></button>
+      <button class="act-btn" onclick="choosePath('武道')"><b>武道一脉</b><span>以血锻骨 · 拳霸乾坤</span></button>
+      <button class="act-btn" onclick="choosePath('佛教')"><b>佛宗一脉</b><span>宏愿无量 · 因果金身</span></button>
+      <button class="act-btn" onclick="choosePath('道教')"><b>玄门一脉</b><span>太上授箓 · 神雷扫障</span></button>
+    </div>
+  </div>
+
+  <!-- 选宗门 -->
+  <div id="view-sect" class="main-panel hidden">
+    <h3 style="text-align:center; margin:0 0 10px 0;">拜入道统宗门</h3>
+    <div id="sect-cards-container" style="display:flex; flex-direction:column; gap:8px;"></div>
+  </div>
+
+  <!-- 游戏主界面 -->
+  <div id="view-game" class="hidden" style="display:flex; flex-direction:column; gap:8px; height:100%;">
+    
+    <div class="status-card">
+      <div class="row-between">
+        <div>
+          <b id="ui-sect-path" style="color:var(--accent); font-size:14px;">宗门 · 流派</b>
+          <span id="ui-realm" style="color:var(--gold); font-size:12px; margin-left:6px;">境界</span>
+        </div>
+        <div style="font-size:12px;">
+          寿元: <b id="ui-age-str" style="color:var(--exp);">18岁0月</b> / <b id="ui-lifespan" style="color:var(--gold);">120</b> 岁
+        </div>
+      </div>
+      
+      <div>
+        <div class="row-between" style="font-size:11px; margin-bottom:2px;">
+          <span>肉身精魄</span>
+          <span id="ui-hp-txt">150/150</span>
+        </div>
+        <div class="bar-wrap">
+          <div id="ui-hp-bar" class="bar-fill hp-fill"></div>
+        </div>
+      </div>
+
+      <div>
+        <div class="row-between" style="font-size:11px; margin-bottom:2px;">
+          <span id="ui-res-name">真元蓄势</span>
+          <span id="ui-res-txt">0/20</span>
+        </div>
+        <div class="bar-wrap">
+          <div id="ui-res-bar" class="bar-fill exp-fill"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="log-panel" id="log-box"></div>
+
+    <div class="main-panel" id="panel-tab-content">
+      
+      <!-- Tab 1: 洞府历练 -->
+      <div id="tab-action" style="display:flex; flex-direction:column; gap:8px;">
+        <div class="action-grid">
+          <div class="act-btn" id="btn-normal-train">
+            <b>吐纳清修 (按住连点)</b>
+            <span>耗时半月 · 细水长流</span>
+          </div>
+          <div class="act-btn" onclick="doBigTrain()">
+            <b>闭关潜修</b>
+            <span>耗时半年 · 暴涨秘源</span>
+          </div>
+          <div class="act-btn" onclick="doAdventure()">
+            <b>历练寻幽</b>
+            <span>外出闯荡 · 耗时半年</span>
+          </div>
+          <div class="act-break act-btn" onclick="triggerBreakthrough()">
+            <b>破关冲击</b>
+            <span style="color:#fde047;">引渡天劫 · 逆天增寿</span>
+          </div>
+          <div class="act-btn act-special" id="btn-special" style="grid-column: span 2;" onclick="doSpecialAction()">
+            <b id="ui-special-act-title">专属秘术</b>
+            <span id="ui-special-act-desc">运转宗门道法</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab 2: 藏经阁 (分阶功法突破) -->
+      <div id="tab-skills" class="hidden" style="display:flex; flex-direction:column; gap:6px;">
+        <div class="row-between" style="font-size:12px; color:var(--subtext); margin-bottom:2px;">
+          <span>藏经阁 (入门→小成→大成→圆满)</span>
+          <span>悟性减耗: <b id="ui-comp-discount" style="color:var(--accent);">0%</b></span>
+        </div>
+        <div id="ui-skills-list" style="display:flex; flex-direction:column; gap:6px;"></div>
+      </div>
+
+      <!-- Tab 3: 宝囊 -->
+      <div id="tab-bag" class="hidden" style="display:flex; flex-direction:column; gap:8px;">
+        <div class="equip-slot-box">
+          <div class="row-between" style="font-size:12px;">
+            <b style="color:var(--accent);">⚔️ 神兵利刃 (<span id="ui-cnt-weapons">0</span>/2)</b>
+            <span style="font-size:11px; color:var(--subtext);">双持强攻</span>
+          </div>
+          <div id="ui-slot-weapons" style="display:flex; flex-direction:column; gap:4px;"></div>
+
+          <div class="row-between" style="font-size:12px; margin-top:4px;">
+            <b style="color:var(--blue);">🛡️ 护体仙甲 (<span id="ui-cnt-armors">0</span>/2)</b>
+            <span style="font-size:11px; color:var(--subtext);">双重甲胄</span>
+          </div>
+          <div id="ui-slot-armors" style="display:flex; flex-direction:column; gap:4px;"></div>
+
+          <div class="row-between" style="font-size:12px; margin-top:4px;">
+            <b style="color:var(--gold);">📿 造化饰品 (<span id="ui-cnt-accessories">0</span>/10)</b>
+            <span style="font-size:11px; color:var(--subtext);">十戒混元通天</span>
+          </div>
+          <div id="ui-slot-accessories" style="display:flex; flex-direction:column; gap:4px;"></div>
+        </div>
+
+        <div style="font-size:12px; color:var(--subtext);">储物囊珍藏 (点击佩戴或吞服):</div>
+        <div id="ui-bag-list" style="display:flex; flex-direction:column; gap:6px;"></div>
+      </div>
+
+      <!-- Tab 4: 属性 -->
+      <div id="tab-profile" class="hidden" style="display:flex; flex-direction:column; gap:6px;">
+        <div class="card-item"><span>先天悟性 (加速参悟)</span><b id="ui-p-comp" style="color:var(--purple);">-</b></div>
+        <div class="card-item"><span>总杀伤战力</span><b id="ui-p-atk" style="color:var(--accent);">-</b></div>
+        <div class="card-item"><span>吐纳修炼速度</span><b id="ui-p-spd" style="color:var(--exp);">-</b></div>
+        <div class="card-item"><span>每动自愈气血</span><b id="ui-p-regen">-</b></div>
+        <div class="card-item"><span>天劫雷罚减免</span><b id="ui-p-trib" style="color:var(--purple);">-</b></div>
+        <div class="card-item"><span>破关消耗减免</span><b id="ui-p-breakdisc" style="color:var(--gold);">-</b></div>
+        <div class="card-item"><span>气运福缘</span><b id="ui-p-luck" style="color:var(--gold);">-</b></div>
+        
+        <div class="card-item" style="flex-direction:column; align-items:flex-start;">
+          <div class="row-between" style="width:100%; margin-bottom:4px;">
+            <span>身负命格道印 (<span id="ui-p-trait-count">0</span>条):</span>
+            <span style="font-size:11px; color:var(--subtext);">逆天累加</span>
+          </div>
+          <div id="ui-p-traits" style="display:flex; gap:6px; flex-wrap:wrap;"></div>
+        </div>
+
+        <div style="display:flex; gap:8px; margin-top:8px;">
+          <button class="btn-sm" style="flex:1; padding:8px;" onclick="saveGame()">保存修仙进度</button>
+          <button class="btn-sm" style="flex:1; padding:8px; background:#7f1d1d;" onclick="resetGame()">兵解轮回</button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- 底部 Tab 导航 -->
+    <div class="tab-nav">
+      <div class="tab-btn active" onclick="switchTab('action', this)">洞府历练</div>
+      <div class="tab-btn" onclick="switchTab('skills', this)">经阁功法</div>
+      <div class="tab-btn" onclick="switchTab('bag', this)">乾坤宝囊</div>
+      <div class="tab-btn" onclick="switchTab('profile', this)">道身属性</div>
+    </div>
+
+  </div>
+
+  <!-- 机缘弹窗 -->
+  <div id="chance-modal" class="hidden">
+    <div class="chance-box">
+      <div style="text-align:center;">
+        <span style="font-size:11px; color:var(--gold); border:1px solid var(--gold); padding:2px 8px; border-radius:12px;">天降造化</span>
+        <h3 id="chance-title" style="margin:8px 0 4px 0; color:var(--text);">洞府奇遇</h3>
+      </div>
+      <div id="chance-desc" style="font-size:13px; line-height:1.6; color:#d4d4d8;">
+        机缘描述文本...
+      </div>
+      <div style="display:flex; gap:8px; margin-top:6px;">
+        <button class="btn-sm" style="flex:1; padding:10px; background:#27272a;" onclick="resolveChance(false)">置之不理 (安全)</button>
+        <button class="btn-sm" style="flex:1; padding:10px; background:#854d0e; border-color:var(--gold); color:#fef08a;" onclick="resolveChance(true)">耗时一月 · 毅然探寻</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// 先天命格池（深度整合悟性加成）
+const TRAIT_POOL = [
+  { id: 't_hmst', name: '鸿蒙圣体', tier: 'red', desc: '战力+50，生命+150，悟性+35，寿元+100岁', apply: (p) => { p.baseAtk += 50; p.baseHp += 150; p.baseComp += 35; p.lifespanBonus += 100; } },
+  { id: 't_tmzz', name: '天命之子', tier: 'red', desc: '气运+80，悟性+20，绝世神兵掉落率极高', apply: (p) => { p.baseLuck += 80; p.baseComp += 20; } },
+  { id: 't_cylg', name: '纯阳仙根', tier: 'gold', desc: '悟性+40，吐纳速度 +100%', apply: (p) => { p.baseComp += 40; p.traitsMod.trainSpd += 1.0; } },
+  { id: 't_tsjt', name: '天生剑胎', tier: 'gold', desc: '先天剑道通明，基础战力暴涨 +60，悟性+15', apply: (p) => { p.baseAtk += 60; p.baseComp += 15; } },
+  { id: 't_npdt', name: '涅槃道体', tier: 'gold', desc: '生命+120，自愈35点，寿元+50岁', apply: (p) => { p.baseHp += 120; p.traitsMod.regen += 35; p.lifespanBonus += 50; } },
+  { id: 't_mnzt', name: '蛮牛血魄', tier: 'blue', desc: '生命上限 +100', apply: (p) => { p.baseHp += 100; } },
+  { id: 't_dbtz', name: '多宝童子', tier: 'blue', desc: '气运 +35', apply: (p) => { p.baseLuck += 35; } },
+  { id: 't_lllt', name: '百草灵体', tier: 'blue', desc: '修炼速度 +50%，每动回血15点，寿元+30岁', apply: (p) => { p.traitsMod.trainSpd += 0.5; p.traitsMod.regen += 15; p.lifespanBonus += 30; } },
+  { id: 't_ppwq', name: '大智若愚', tier: 'white', desc: '悟性+25，气运+15', apply: (p) => { p.baseComp += 25; p.baseLuck += 15; } },
+  { id: 't_stkj', name: '稍具根骨', tier: 'white', desc: '战力 +15', apply: (p) => { p.baseAtk += 15; } },
+  { id: 't_qndx', name: '长生龟相', tier: 'white', desc: '寿元上限 +40岁', apply: (p) => { p.lifespanBonus += 40; } },
+  { id: 't_ctpw_init', name: '先天重瞳', tier: 'red', desc: '看破万法虚妄，悟性+50，战力+70，天劫免伤+30%', apply: (p) => { p.baseComp += 50; p.baseAtk += 70; p.passives.tribResist += 0.3; } },
+  { id: 't_hdsg', name: '混沌道体', tier: 'red', desc: '万法亲和，悟性+45，生命+100，寿元+150岁', apply: (p) => { p.baseComp += 45; p.lifespanBonus += 150; p.baseHp += 100; } },
+  { id: 't_zlzs', name: '真龙转世', tier: 'red', desc: '气血+260，战力+55，普攻自带吸血', apply: (p) => { p.baseHp += 260; p.baseAtk += 55; p.passives.vampire = true; } },
+  { id: 't_sqcs', name: '三清眷顾', tier: 'red', desc: '玄门大道通明，悟性+50，破关消耗减免25%，气运+50', apply: (p) => { p.baseComp += 50; p.baseLuck += 50; } },
+  { id: 't_tyds', name: '太阳真体', tier: 'gold', desc: '战力+50，天劫免伤+20%', apply: (p) => { p.baseAtk += 50; p.passives.tribResist += 0.2; } },
+  { id: 't_tyxs', name: '太阴玄体', tier: 'gold', desc: '自愈气血+30点，寿元+80岁', apply: (p) => { p.traitsMod.regen += 30; p.lifespanBonus += 80; } },
+  { id: 't_kjjt', name: '开天剑心', tier: 'gold', desc: '剑招领悟极速，悟性+25，基础战力+65', apply: (p) => { p.baseComp += 25; p.baseAtk += 65; } },
+  { id: 't_wlyj', name: '无漏金身', tier: 'gold', desc: '气血上限+220，雷劫免伤+15%', apply: (p) => { p.baseHp += 220; p.passives.tribResist += 0.15; } },
+  { id: 't_qyds', name: '气运化龙', tier: 'gold', desc: '气运+65，奇遇获得高阶神兵概率暴涨', apply: (p) => { p.baseLuck += 65; } },
+  { id: 't_blcs', name: '拔山超海', tier: 'gold', desc: '战力+45，生命上限+150', apply: (p) => { p.baseAtk += 45; p.baseHp += 150; } },
+  { id: 't_fxzs', name: '风行灵脉', tier: 'blue', desc: '修炼速度+40%', apply: (p) => { p.traitsMod.trainSpd += 0.4; } },
+  { id: 't_jhxt', name: '金火通明', tier: 'blue', desc: '战力+30', apply: (p) => { p.baseAtk += 30; } },
+  { id: 't_myqy', name: '木灵回春', tier: 'blue', desc: '自愈气血+15点，寿元+30岁', apply: (p) => { p.traitsMod.regen += 15; p.lifespanBonus += 30; } },
+  { id: 't_tltz', name: '通灵童子', tier: 'blue', desc: '生而聪颖，悟性+30，气运+25', apply: (p) => { p.baseComp += 30; p.baseLuck += 25; } },
+  { id: 't_tdtr', name: '铁胆铜皮', tier: 'blue', desc: '生命上限+120', apply: (p) => { p.baseHp += 120; } },
+  { id: 't_ddcy', name: '道心初萌', tier: 'blue', desc: '道心通透，悟性+20，寿元+20岁', apply: (p) => { p.baseComp += 20; p.lifespanBonus += 20; } },
+  { id: 't_jjgm', name: '矫健轻灵', tier: 'white', desc: '战力+10', apply: (p) => { p.baseAtk += 10; } },
+  { id: 't_smkz', name: '身强体壮', tier: 'white', desc: '气血上限+60', apply: (p) => { p.baseHp += 60; } },
+  { id: 't_xyff', name: '心平气和', tier: 'white', desc: '心如止水，悟性+10，寿元+25岁', apply: (p) => { p.baseComp += 10; p.lifespanBonus += 25; } },
+  { id: 't_fxwh', name: '福星微照', tier: 'white', desc: '气运+12', apply: (p) => { p.baseLuck += 12; } },
+  { id: 't_qmxt', name: '勤奋向道', tier: 'white', desc: '苦修不缀，悟性+15', apply: (p) => { p.baseComp += 15; } }
+];
+
+const FORTUNE_TRAIT_POOL = [
+  { id: 'ft_ctpw', name: '重瞳破妄', tier: 'red', desc: '悟性+50，战力+80，气运+40，寿元+60岁', apply: (p) => { p.baseComp += 50; p.baseAtk += 80; p.baseLuck += 40; p.lifespanBonus += 60; } },
+  { id: 'ft_hgst', name: '荒古圣体', tier: 'red', desc: '气血+300，战力+60，每回合自愈+25', apply: (p) => { p.baseHp += 300; p.hp += 300; p.baseAtk += 60; p.traitsMod.regen += 25; } },
+  { id: 'ft_dxtm', name: '道心通明', tier: 'gold', desc: '悟性暴涨+60，突破消耗减免20%', apply: (p) => { p.baseComp += 60; } },
+  { id: 'ft_zlbx', name: '真龙宝血', tier: 'gold', desc: '气血+200，天劫雷罚免伤+20%', apply: (p) => { p.baseHp += 200; p.hp += 200; p.passives.tribResist += 0.2; } },
+  { id: 'ft_dqwc', name: '大器晚成', tier: 'gold', desc: '悟性+40，修炼速度+100%，寿元+100岁', apply: (p) => { p.baseComp += 40; p.traitsMod.trainSpd += 1.0; p.lifespanBonus += 100; } },
+  { id: 'ft_fyws', name: '福缘无双', tier: 'blue', desc: '气运暴增 +50', apply: (p) => { p.baseLuck += 50; } },
+  { id: 'ft_tlzh', name: '通灵造化', tier: 'blue', desc: '悟性+25，最大气血+150，寿元+30岁', apply: (p) => { p.baseComp += 25; p.baseHp += 150; p.hp += 150; p.lifespanBonus += 30; } },
+  { id: 'ft_xtdt', name: '先天道胎', tier: 'red', desc: '悟性+70，突破免伤+25%', apply: (p) => { p.baseComp += 70; p.passives.tribResist += 0.25; } },
+  { id: 'ft_jkmt', name: '剑开天门', tier: 'gold', desc: '剑道极境，基础杀伐战力暴涨 +90，悟性+20', apply: (p) => { p.baseAtk += 90; p.baseComp += 20; } },
+  { id: 'ft_bmmq', name: '不灭魔躯', tier: 'gold', desc: '肉身百炼，生命上限+350，普攻必吸血', apply: (p) => { p.baseHp += 350; p.hp += 350; p.passives.vampire = true; } },
+  { id: 'ft_qyjl', name: '气运金龙', tier: 'red', desc: '龙运庇护，气运暴增+100，寿元+120岁', apply: (p) => { p.baseLuck += 100; p.lifespanBonus += 120; } }
+];
+
+const SECT_POOL = {
+  '练气': [
+    { id: 's_wj', name: '万剑仙宗', desc: '剑修极道，杀伤至上。', perk: '攻击+35，悟性+10，赐【青锋飞剑】', apply: (p)=>{ p.baseAtk+=35; p.baseComp+=10; addItem('青锋飞剑','weapon', {atk:35}, '仙宗极品飞剑'); }},
+    { id: 's_tx', name: '太虚灵符门', desc: '符道玄通，兼修吐纳。', perk: '悟性+30，赐【太虚护灵佩】', apply: (p)=>{ p.baseComp+=30; addItem('太虚护灵佩','accessory', {luck:20, breakDiscount:0.25}, '大幅降低破境阻碍'); }},
+    { id: 's_yw', name: '药王神谷', desc: '草木成圣，延年益寿。', perk: '寿元+50岁，自愈+25，赐【碧波仙萝袍】', apply: (p)=>{ p.lifespanBonus+=50; p.traitsMod.regen+=25; addItem('碧波仙萝袍','armor', {hp:150}, '生机流转'); }}
+  ],
+  '武道': [
+    { id: 's_xl', name: '修罗霸刀门', desc: '饮煞凝血，杀气冲霄。', perk: '战力+30，赐【血煞修罗刃】', apply: (p)=>{ p.baseAtk+=30; addItem('血煞修罗刃','weapon', {atk:40, vampire:true}, '刀锋嗜血回生'); }},
+    { id: 's_jg', name: '不动金刚宗', desc: '千锤百炼金刚不坏。', perk: '生命+200，赐【金刚玄铁铠】', apply: (p)=>{ p.baseHp+=200; addItem('金刚玄铁铠','armor', {hp:200, tribResist:0.35}, '无惧雷劫'); }},
+    { id: 's_fl', name: '风雷武馆', desc: '迅如风雷，顿悟神速。', perk: '悟性+25，修炼速度+50%，赐【风雷引气戒】', apply: (p)=>{ p.baseComp+=25; p.traitsMod.trainSpd+=0.5; addItem('风雷引气戒','accessory', {trainSpd:0.4, luck:25}, '风雷护体'); }}
+  ],
+  '佛教': [
+    { id: 's_dly', name: '大雷音古刹', desc: '降妖诛邪，佛门祖庭。', perk: '战力+30，悟性+15，赐【伏魔降妖杵】', apply: (p)=>{ p.baseAtk+=30; p.baseComp+=15; addItem('伏魔降妖杵','weapon', {atk:45}, '降魔佛兵'); }},
+    { id: 's_pt', name: '普陀净苑', desc: '大慈大悲，普度众生。', perk: '寿元+40岁，悟性+20，自愈+30，赐【慈悲菩提珠】', apply: (p)=>{ p.lifespanBonus+=40; p.baseComp+=20; p.traitsMod.regen+=30; addItem('慈悲菩提珠','accessory', {luck:40, breakDiscount:0.3}, '佛光照耀识海'); }},
+    { id: 's_fm', name: '密宗伏魔殿', desc: '怒目金刚，以杀止杀。', perk: '攻击+40，赐【明王锁子甲】', apply: (p)=>{ p.baseAtk+=40; addItem('明王锁子甲','armor', {hp:180, tribResist:0.25}, '威武刚健'); }}
+  ],
+  '道教': [
+    { id: 's_lh', name: '龙虎山天师府', desc: '五雷正法，扫荡阴邪。', perk: '战力+35，赐【天师五雷符剑】', apply: (p)=>{ p.baseAtk+=35; addItem('天师五雷符剑','weapon', {atk:50}, '天雷破法'); }},
+    { id: 's_qz', name: '全真纯阳宫', desc: '内丹清修，结无瑕金丹。', perk: '悟性+35，赐【纯阳无极袍】', apply: (p)=>{ p.baseComp+=35; addItem('纯阳无极袍','armor', {hp:160, tribResist:0.3}, '水火不侵'); }},
+    { id: 's_ms', name: '茅山正道宗', desc: '通幽察微，趋吉避凶。', perk: '气运+60，赐【太阴照妖镜】', apply: (p)=>{ p.baseLuck+=60; addItem('太阴照妖镜','accessory', {luck:50, breakDiscount:0.25}, '勘破虚妄'); }}
+  ]
+};
+
+function buildSubRealms(baseRealms) {
+  const subs = ['初期', '中期', '后期', '大圆满'];
+  let list = [];
+  baseRealms.forEach((r, idx) => {
+    if (idx === baseRealms.length - 1) list.push(`${r}·圆满飞升`);
+    else subs.forEach(s => list.push(`${r}·${s}`));
+  });
+  return list;
+}
+
+const RAW_REALMS = {
+  '练气': ['练气期', '筑基期', '金丹期', '元婴期', '化神期', '炼虚期', '合体期', '大乘期', '渡劫期'],
+  '武道': ['淬体境', '炼骨境', '凝血境', '先天境', '宗师境', '武王境', '武尊境', '武圣境', '武神境'],
+  '佛教': ['沙弥境', '执事境', '头陀境', '比丘境', '罗汉境', '金刚境', '菩萨境', '佛陀境', '准提金身'],
+  '道教': ['道童境', '居士境', '授箓境', '执事境', '法师境', '真人境', '天师境', '地仙境', '九天纯阳']
+};
+
+const REALM_LIFESPAN_REWARDS = [30, 80, 200, 400, 800, 1500, 3000, 10000];
+
+const PATHS = {
+  '练气': { resName: '真元', realms: buildSubRealms(RAW_REALMS['练气']), specialAct: '淬炼飞剑', specialDesc: '真元温养双持锋芒' },
+  '武道': { resName: '体煞', realms: buildSubRealms(RAW_REALMS['武道']), specialAct: '燃血化煞', specialDesc: '自耗少量气血强铸肉身' },
+  '佛教': { resName: '愿力', realms: buildSubRealms(RAW_REALMS['佛教']), specialAct: '梵唱甘霖', specialDesc: '瞬间回满肉身气血' },
+  '道教': { resName: '功德', realms: buildSubRealms(RAW_REALMS['道教']), specialAct: '焚表请神', specialDesc: '纯阳金光全面增幅' }
+};
+
+// ----------------------------------------------------
+// 【全功法数值结构配置】：支持入门/小成/大成/圆满四层数值倍增
+// ----------------------------------------------------
+const SKILL_STAGE_NAMES = ['未入门', '入门', '小成', '大成', '圆满'];
+const SKILL_STAGE_COST_MULT = [1.0, 1.8, 3.0, 5.0]; // 晋级消耗倍数
+
+const SKILL_DB = [
+  // 练气
+  { id: 'lq_1', rank: '黄阶', path: '练气', name: '万剑归宗诀', baseCost: 20, desc: '纯正剑修杀招', stats: { atk: 50, train: 0.1 } },
+  { id: 'lq_5', rank: '黄阶', path: '练气', name: '归元吐纳诀', baseCost: 15, desc: '基础导气养元', stats: { hp: 100, train: 0.25 } },
+  { id: 'lq_6', rank: '黄阶', path: '练气', name: '分光剑影术', baseCost: 20, desc: '剑光分化杀伐', stats: { atk: 35, luck: 10 } },
+  { id: 'lq_2', rank: '玄阶', path: '练气', name: '太清聚灵经', baseCost: 40, desc: '天地灵气如潮汇入', stats: { train: 0.8, life: 15 } },
+  { id: 'lq_7', rank: '玄阶', path: '练气', name: '纯阳烈火真诀', baseCost: 45, desc: '引地肺离火淬炼真元', stats: { atk: 55, trib: 0.08 } },
+  { id: 'lq_8', rank: '玄阶', path: '练气', name: '太虚步云履水篇', baseCost: 45, desc: '御风履水身法超脱', stats: { regen: 12, life: 20 } },
+  { id: 'lq_3', rank: '地阶', path: '练气', name: '青莲剑歌', baseCost: 70, desc: '青莲化境剑气纵横', stats: { atk: 80, luck: 25, life: 40 } },
+  { id: 'lq_9', rank: '地阶', path: '练气', name: '九霄神雷御剑真诀', baseCost: 80, desc: '雷霆炼剑荡尽群魔', stats: { atk: 95, trib: 0.15 } },
+  { id: 'lq_4', rank: '天阶', path: '练气', name: '一气化三清', baseCost: 120, desc: '玄门无上分身圣法', stats: { train: 1.5, comp: 30, life: 150 } },
+  { id: 'lq_10', rank: '天阶', path: '练气', name: '混沌开天剑典', baseCost: 150, desc: '一剑破开宇宙鸿蒙', stats: { atk: 150, breakDisc: 0.15, life: 120 } },
+
+  // 武道
+  { id: 'wd_1', rank: '黄阶', path: '武道', name: '九转金身诀', baseCost: 20, desc: '横炼皮肉骨髓', stats: { hp: 260, train: 0.1 } },
+  { id: 'wd_5', rank: '黄阶', path: '武道', name: '铁线碎石拳', baseCost: 15, desc: '刚猛铁铸拳劲', stats: { atk: 35, hp: 80 } },
+  { id: 'wd_6', rank: '黄阶', path: '武道', name: '铜皮铁骨功', baseCost: 20, desc: '刀枪不入皮膜结实', stats: { hp: 120, trib: 0.12 } },
+  { id: 'wd_2', rank: '玄阶', path: '武道', name: '修罗吞血录', baseCost: 40, desc: '以战养战汲取生机', stats: { atk: 45, vampire: true } },
+  { id: 'wd_7', rank: '玄阶', path: '武道', name: '天罡三十六路截脉手', baseCost: 45, desc: '点穴破罡招招致命', stats: { atk: 60, loot: 0.25 } },
+  { id: 'wd_8', rank: '玄阶', path: '武道', name: '修罗七煞步', baseCost: 45, desc: '煞气凝步踏破关山', stats: { atk: 40, regen: 15, life: 20 } },
+  { id: 'wd_3', rank: '地阶', path: '武道', name: '神象镇狱劲', baseCost: 75, desc: '肉身化八亿四千万微粒', stats: { atk: 75, hp: 260, life: 50 } },
+  { id: 'wd_9', rank: '地阶', path: '武道', name: '大荒囚天指', baseCost: 80, desc: '大荒武道一指囚天', stats: { atk: 100, hp: 150 } },
+  { id: 'wd_4', rank: '天阶', path: '武道', name: '不死不灭经', baseCost: 120, desc: '肉身滴血重生不朽', stats: { regen: 25, trib: 0.2, life: 200 } },
+  { id: 'wd_10', rank: '天阶', path: '武道', name: '太初神体开天诀', baseCost: 150, desc: '肉身极道匹敌神魔', stats: { hp: 500, atk: 120, life: 250 } },
+
+  // 佛教
+  { id: 'fj_1', rank: '黄阶', path: '佛教', name: '金刚不坏体', baseCost: 20, desc: '佛法护持硬抗天劫', stats: { trib: 0.35, hp: 100 } },
+  { id: 'fj_2', rank: '玄阶', path: '佛教', name: '大悲发愿印', baseCost: 40, desc: '慈悲为怀生生不息', stats: { hp: 200, regen: 15, life: 30 } },
+  { id: 'fj_4', rank: '玄阶', path: '佛教', name: '菩提清净心经', baseCost: 45, desc: '心无挂碍灵台澄澈', stats: { comp: 25, train: 0.5, luck: 20 } },
+  { id: 'fj_5', rank: '玄阶', path: '佛教', name: '拈花普渡指', baseCost: 45, desc: '一花一世界指意普渡', stats: { atk: 50, regen: 12 } },
+  { id: 'fj_6', rank: '地阶', path: '佛教', name: '琉璃药师光明经', baseCost: 75, desc: '琉璃净体百病不生', stats: { regen: 30, life: 100 } },
+  { id: 'fj_7', rank: '地阶', path: '佛教', name: '如来神掌', baseCost: 85, desc: '从天而降万佛伏魔', stats: { atk: 105, hp: 250 } },
+  { id: 'fj_3', rank: '天阶', path: '佛教', name: '大日如来真经', baseCost: 120, desc: '普照大千破除万障', stats: { atk: 90, trib: 0.25, comp: 35, life: 250 } },
+
+  // 道教
+  { id: 'dj_1', rank: '黄阶', path: '道教', name: '九天应元雷法', baseCost: 20, desc: '正统雷法荡除阴邪', stats: { atk: 50, loot: 0.5 } },
+  { id: 'dj_2', rank: '玄阶', path: '道教', name: '周天星斗吐纳篇', baseCost: 40, desc: '牵引周天星宿入窍', stats: { hp: 160, train: 0.7, life: 25 } },
+  { id: 'dj_5', rank: '玄阶', path: '道教', name: '清静无为道德经', baseCost: 45, desc: '顺天应物道法自然', stats: { comp: 30, breakDisc: 0.12, life: 40 } },
+  { id: 'dj_6', rank: '玄阶', path: '道教', name: '正一天罡雷霆箓', baseCost: 45, desc: '虚空成符驱神役鬼', stats: { atk: 55, trib: 0.1 } },
+  { id: 'dj_3', rank: '地阶', path: '道教', name: '太上感应篇', baseCost: 75, desc: '天人交感福缘连绵', stats: { luck: 50, life: 70, comp: 20 } },
+  { id: 'dj_7', rank: '地阶', path: '道教', name: '三昧纯阳真火诀', baseCost: 80, desc: '精气神归一真火炽盛', stats: { atk: 85, train: 0.5 } },
+  { id: 'dj_8', rank: '地阶', path: '道教', name: '九字真言秘术', baseCost: 85, desc: '阵列前行万法不侵', stats: { atk: 75, hp: 200, trib: 0.12 } },
+  { id: 'dj_4', rank: '天阶', path: '道教', name: '紫霄玉枢天雷诀', baseCost: 120, desc: '代天执罚神雷至尊', stats: { atk: 120, trib: 0.15, life: 180 } },
+
+  // 通用
+  { id: 'ty_1', rank: '黄阶', path: '通用', name: '龟息纳甲神功', baseCost: 25, desc: '锁闭真精延寿绵延', stats: { hp: 220, life: 40 } },
+  { id: 'ty_4', rank: '玄阶', path: '通用', name: '百草还丹经', baseCost: 35, desc: '调和草木自愈还丹', stats: { regen: 18, life: 30 } },
+  { id: 'ty_5', rank: '玄阶', path: '通用', name: '游龙惊鸿步', baseCost: 40, desc: '惊鸿掠影躲避机锋', stats: { atk: 35, luck: 18 } },
+  { id: 'ty_2', rank: '地阶', path: '通用', name: '吞天魔功', baseCost: 75, desc: '损天地生灵补益己身', stats: { atk: 70, loot: 0.8, life: 60 } },
+  { id: 'ty_6', rank: '地阶', path: '通用', name: '逆转阴阳夺天功', baseCost: 85, desc: '阴阳逆乱夺天续命', stats: { atk: 80, life: 80, hp: 160 } },
+  { id: 'ty_3', rank: '天阶', path: '通用', name: '八九玄功', baseCost: 130, desc: '七十二般肉身变化极境', stats: { atk: 100, hp: 400, train: 0.8, life: 300 } },
+  { id: 'ty_7', rank: '天阶', path: '通用', name: '他化自在大法', baseCost: 160, desc: '他化万古自化无量', stats: { atk: 150, train: 1.2, comp: 40, luck: 50, life: 400 } }
+];
+
+const CHANCE_EVENTS = [
+  {
+    title: '虚空混沌灵眼现世',
+    desc: '虚空裂隙中涌出九彩混沌灵眼，道韵弥漫，可尝试吸纳淬炼道基。耗时 1 个月！',
+    good: (p) => {
+      p.realmIdx = Math.min(PATHS[p.path].realms.length - 1, p.realmIdx + 1);
+      p.baseHp += 50; p.hp = getMaxHp(); p.baseAtk += 20; p.lifespanBonus += 15;
+      return `<b style="color:var(--gold);">【天地奇遇·顿悟飞跃】混沌之气灌体，直破瓶颈！当场晋升至【${PATHS[p.path].realms[p.realmIdx]}】！寿元+15年！</b>`;
+    },
+    badText: '混沌气流狂暴肆虐，反噬丹田经脉！'
+  },
+  {
+    title: '太古圣贤传法古碑',
+    desc: '绝峰古碑印有圣人道韵，传闻参透者可使功法瞬息突破化境！耗时 1 个月！',
+    good: (p) => {
+      // 随机升级一部已学功法，或直接圆满
+      let learnedKeys = Object.keys(p.skillStages).filter(k => p.skillStages[k] < 4);
+      if (learnedKeys.length > 0) {
+        let pickedKey = learnedKeys[Math.floor(Math.random() * learnedKeys.length)];
+        let targetSkill = SKILL_DB.find(s => s.id === pickedKey);
+        p.skillStages[pickedKey] = 4; // 直接大圆满！
+        return `<b style="color:var(--purple);">【圣贤指路·瞬间圆满】圣人虚影抚顶！神功【${targetSkill.rank}·${targetSkill.name}】直接顿悟至【圆满境界】！</b>`;
+      } else {
+        p.baseComp += 25;
+        p.baseAtk += 80;
+        return `<b style="color:var(--purple);">你万法已融，圣碑道韵洗髓，悟性永久+25，战力狂飙+80！</b>`;
+      }
+    },
+    badText: '碑中文道杀气凛冽，神念遭圣威重挫！'
+  },
+  {
+    title: '九天清气聚顶灌髓',
+    desc: '九霄之上降下万道紫气瑞霞，将你笼罩，似要改换根骨肉胎。耗时 1 个月！',
+    good: (p) => {
+      let trait = FORTUNE_TRAIT_POOL.find(t => t.id === 'ft_xtdt');
+      gainTrait(trait);
+      return `<b style="color:var(--gold);">【逆天改命·道胎成就】天道垂青，重铸身躯！【觉醒命格：先天道胎】！</b>`;
+    },
+    badText: '九天罡风撕扯神识，肉身受皮肉撕裂之苦！'
+  },
+  {
+    title: '荒古剑冢万剑齐鸣',
+    desc: '步入神兵陨落之地，万千通灵古剑冲天而起，欲认你为主！耗时 1 个月！',
+    good: (p) => {
+      let trait = FORTUNE_TRAIT_POOL.find(t => t.id === 'ft_jkmt');
+      gainTrait(trait);
+      addItem('开天剑胎', 'weapon', {atk: 80 + p.realmIdx * 20}, '引动天地剑道之极致利刃');
+      return `<b style="color:var(--accent);">【剑道通神】万剑臣服！【觉醒命格：剑开天门】并获赠神兵【开天剑胎】！</b>`;
+    },
+    badText: '剑煞狂暴穿心，护体神罡被割裂千百道伤痕！'
+  },
+  {
+    title: '人皇遗留山河九鼎',
+    desc: '古皇陵深处隐现一尊泛着万民香火的神鼎，鼎内气运如沸水翻涌！耗时 1 个月！',
+    good: (p) => {
+      let trait = FORTUNE_TRAIT_POOL.find(t => t.id === 'ft_qyjl');
+      gainTrait(trait);
+      return `<b style="color:var(--gold);">【皇气加身】人皇金龙环绕道身！【觉醒命格：气运金龙】（气运暴涨+100，寿元+120岁）！</b>`;
+    },
+    badText: '皇道威压极重，气血被生生压制震荡吐血！'
+  },
+  {
+    title: '太虚玄龟坐化遗蜕',
+    desc: '深海归墟之中，一尊万年玄龟真壳漂浮而出，龟甲印满先天洛书。耗时 1 个月！',
+    good: (p) => {
+      addItem('太乙玄冥宝铠', 'armor', {hp: 350 + p.realmIdx * 80, tribResist: 0.35}, '玄龟骨甲所铸，万劫不侵');
+      return `<b style="color:var(--blue);">【神甲认主】采玄龟精壳，炼化得传世宝甲【太乙玄冥宝铠】（血量暴涨，免伤+35%）！</b>`;
+    },
+    badText: '归墟暗流绞杀，险些被吞入海底巨眼漩涡！'
+  },
+  {
+    title: '天外流星砸出极品仙戒',
+    desc: '域外陨星自九天坠落，坑底核心处有一枚温润如初的先天灵戒。耗时 1 个月！',
+    good: (p) => {
+      addItem('混沌阴阳两界戒', 'accessory', {luck: 70, breakDiscount: 0.3, trainSpd: 0.6}, '纳须弥于芥子');
+      return `<b style="color:var(--gold);">【造化灵物】寻得至宝饰品【混沌阴阳两界戒】（气运+70，突破消耗减30%，修炼+60%）！</b>`;
+    },
+    badText: '星辰余火爆燃，炽热星火灼伤肺腑！'
+  },
+  {
+    title: '九千年瑶池蟠桃母树',
+    desc: '秘境禁区中有仙气氤氲的古蟠桃树，三千年开花，三千年结果，九千年方熟！耗时 1 个月！',
+    good: (p) => {
+      p.lifespanBonus += 300;
+      p.hp = getMaxHp();
+      return `<b style="color:var(--exp);">【延寿延年】服下一枚紫纹绛雪仙桃！寿元大限直接暴增 +300 岁！伤势痊愈！</b>`;
+    },
+    badText: '蟠桃守护凶兽九头金雕扑杀，负伤遁走！'
+  },
+  {
+    title: '大乘散仙坐化法阵',
+    desc: '地下熔岩窟深处，一尊昔年大乘期散仙遗体正散溢出瀚海般的纯阳法力！耗时 1 个月！',
+    good: (p) => {
+      let gain = 400 + p.realmIdx * 100;
+      p.specialRes += gain;
+      return `<b style="color:var(--gold);">【散仙遗泽】吞纳散仙纯阳元灵，修为池暴增 ${gain} 点秘源！</b>`;
+    },
+    badText: '洞府自毁绝杀大阵触发，引动地心毒煞轰击！'
+  },
+  {
+    title: '古战矛插落葬仙崖',
+    desc: '绝崖古战场中，一柄嗜血战矛横插万丈山体，怨煞之气冲天！耗时 1 个月！',
+    good: (p) => {
+      addItem('弑神碎星枪', 'weapon', {atk: 90 + p.realmIdx * 25, vampire: true}, '嗜神屠仙重兵');
+      return `<b style="color:var(--accent);">【霸绝神兵】强行拔出并驯服【弑神碎星枪】（攻击暴涨，自带吸血）！</b>`;
+    },
+    badText: '矛中亿万怨灵咆哮反噬，神魂险被震散！'
+  },
+  {
+    title: '天道金榜显化传法',
+    desc: '天道降下无字金榜，若能抬头直视金榜纹路一月，便可得天赐神术。耗时 1 个月！',
+    good: (p) => {
+      // 挑一部未学功法直接满级
+      let unlearned = SKILL_DB.filter(s => (s.path === '通用' || s.path === p.path) && !p.skillStages[s.id]);
+      if (unlearned.length > 0) {
+        let picked = unlearned[Math.floor(Math.random() * unlearned.length)];
+        p.skillStages[picked.id] = 4; // 直接满级
+        return `<b style="color:var(--purple);">【天道赐法】金榜落笔！【${picked.rank}·${picked.name}】免修习直接达到【圆满境界】！</b>`;
+      } else {
+        p.baseComp += 30;
+        return `<b style="color:var(--purple);">金榜赐福，神魂通透，先天悟性永久暴涨 +30！</b>`;
+      }
+    },
+    badText: '天道至高不可直视，双目刺痛神光受损！'
+  },
+  {
+    title: '黄泉九幽冥河淬体',
+    desc: '地底阴穴中流淌一汪冰冷刺骨的黄泉重水，乃魔道体修淬骨极品。耗时 1 个月！',
+    good: (p) => {
+      let trait = FORTUNE_TRAIT_POOL.find(t => t.id === 'ft_bmmq');
+      gainTrait(trait);
+      return `<b style="color:var(--red);">【九幽淬炼】以死气点燃肉身生机！【觉醒命格：不灭魔躯】！</b>`;
+    },
+    badText: '死水阴毒入髓，经脉严重冻僵，受极寒重创！'
+  },
+  {
+    title: '上古海眼真龙献宝',
+    desc: '一条沉眠海眼的上古老龙见你身负大气运，吐出一枚伴生龙珠结缘。耗时 1 个月！',
+    good: (p) => {
+      addItem('三十六颗定海珠', 'accessory', {luck: 85, breakDiscount: 0.35, trainSpd: 0.5}, '演化诸天世界');
+      return `<b style="color:var(--gold);">【真龙结缘】获赠封神至宝【三十六颗定海珠】（气运+85，突破减免35%）！</b>`;
+    },
+    badText: '海啸龙威暴虐，真气逆行冲撞肺腑！'
+  },
+  {
+    title: '天地灵气龙卷风暴',
+    desc: '万里灵脉坍缩，形成贯通天地的灵气龙卷风暴，正中现出灵髓结晶。耗时 1 个月！',
+    good: (p) => {
+      p.realmIdx = Math.min(PATHS[p.path].realms.length - 1, p.realmIdx + 1);
+      p.baseHp += 60; p.hp = getMaxHp(); p.baseAtk += 25;
+      return `<b style="color:var(--exp);">【风暴灌顶】身处灵眼中央无伤蜕变！直接跃升一个境界至【${PATHS[p.path].realms[p.realmIdx]}】！</b>`;
+    },
+    badText: '风暴撕扯护体灵光，身躯被罡气擦伤流血！'
+  },
+  {
+    title: '万载万年地心石钟乳',
+    desc: '幽暗石窟内一汪万年石乳汇聚成池，散发乳白醇厚仙光。耗时 1 个月！',
+    good: (p) => {
+      p.baseHp += 300;
+      p.hp = getMaxHp();
+      p.lifespanBonus += 80;
+      p.traitsMod.regen += 20;
+      return `<b style="color:var(--gold);">【伐骨洗髓】痛饮万年石乳！气血上限+300且全满，自愈+20，寿元+80岁！</b>`;
+    },
+    badText: '洞穴毒蝎群出动，被上古毒钩刺中，剧痛难忍！'
+  }
+];
+
+let activeChance = null;
+
+let player = {
+  path: '',
+  sect: '',
+  realmIdx: 0,
+  hp: 150,
+  baseHp: 150,
+  baseAtk: 25,
+  baseLuck: 15,
+  baseComp: 20, // 核心属性：先天悟性 (基础 20 点)
+  specialRes: 0,
+  
+  ageYears: 18,
+  ageMonths: 0,
+  baseLifespan: 120,
+  lifespanBonus: 0,
+  
+  equipped: { weapons: [], armors: [], accessories: [] },
+  inventory: [],
+  skillStages: {}, // 功法境界字典: { 'lq_1': 1(入门), 'lq_2': 4(圆满) }
+  selectedTraits: [],
+  traitsMod: { trainSpd: 1.0, regen: 5 },
+  passives: { trainBonus: 0, tribResist: 0, vampire: false, lootBonus: 0 }
+};
+
+let rolled5Traits = [];
+let pickedTraits = [];
+
+function log(msg) {
+  const box = document.getElementById('log-box');
+  const div = document.createElement('div');
+  div.className = 'log-item';
+  div.innerHTML = msg;
+  box.appendChild(div);
+  box.scrollTop = box.scrollHeight;
+}
+
+// ----------------------------------------------------
+// 【全属性动态计算核心】：功法 4 境界倍率放大
+// ----------------------------------------------------
+// 各境界倍率：未入门0, 入门1.0, 小成1.6, 大成2.4, 圆满3.5
+const STAGE_MULTIPLIERS = [0, 1.0, 1.6, 2.4, 3.5];
+
+function getSkillTotalBonus() {
+  let bonus = { atk: 0, hp: 0, train: 0, regen: 0, trib: 0, luck: 0, life: 0, comp: 0, breakDisc: 0, loot: 0, vampire: false };
+  
+  for (let sId in player.skillStages) {
+    let stage = player.skillStages[sId] || 0;
+    if (stage <= 0) continue;
+    let skill = SKILL_DB.find(s => s.id === sId);
+    if (!skill || !skill.stats) continue;
+    
+    let mult = STAGE_MULTIPLIERS[stage] || 1.0;
+    if (skill.stats.atk) bonus.atk += Math.floor(skill.stats.atk * mult);
+    if (skill.stats.hp) bonus.hp += Math.floor(skill.stats.hp * mult);
+    if (skill.stats.train) bonus.train += Number((skill.stats.train * mult).toFixed(2));
+    if (skill.stats.regen) bonus.regen += Math.floor(skill.stats.regen * mult);
+    if (skill.stats.trib) bonus.trib += Number((skill.stats.trib * mult).toFixed(2));
+    if (skill.stats.luck) bonus.luck += Math.floor(skill.stats.luck * mult);
+    if (skill.stats.life) bonus.life += Math.floor(skill.stats.life * mult);
+    if (skill.stats.comp) bonus.comp += Math.floor(skill.stats.comp * mult);
+    if (skill.stats.breakDisc) bonus.breakDisc += Number((skill.stats.breakDisc * mult).toFixed(2));
+    if (skill.stats.loot) bonus.loot += Number((skill.stats.loot * mult).toFixed(2));
+    if (skill.stats.vampire) bonus.vampire = true;
+  }
+  return bonus;
+}
+
+function getTotalComp() {
+  let sBonus = getSkillTotalBonus();
+  return player.baseComp + sBonus.comp;
+}
+
+function getCompDiscount() {
+  let comp = getTotalComp();
+  // 悟性减免参悟消耗：悟性越高减免越多，最大减免 70%
+  return Math.min(0.70, comp / 150);
+}
+
+function getMaxHp() {
+  let armorHp = player.equipped.armors.reduce((sum, a) => sum + (a.hp || 0), 0);
+  let sBonus = getSkillTotalBonus();
+  return player.baseHp + armorHp + sBonus.hp;
+}
+
+function getTotalAtk() {
+  let wAtk = player.equipped.weapons.reduce((sum, w) => sum + (w.atk || 0), 0);
+  let sBonus = getSkillTotalBonus();
+  return player.baseAtk + wAtk + sBonus.atk;
+}
+
+function getTotalLuck() {
+  let accLuck = player.equipped.accessories.reduce((sum, a) => sum + (a.luck || 0), 0);
+  let sBonus = getSkillTotalBonus();
+  return player.baseLuck + accLuck + sBonus.luck;
+}
+
+function getTotalTribResist() {
+  let armorResist = player.equipped.armors.reduce((sum, a) => sum + (a.tribResist || 0), 0);
+  let sBonus = getSkillTotalBonus();
+  return Math.min(0.95, player.passives.tribResist + armorResist + sBonus.trib);
+}
+
+function getBreakDiscount() {
+  let accDisc = player.equipped.accessories.reduce((sum, a) => sum + (a.breakDiscount || 0), 0);
+  let sBonus = getSkillTotalBonus();
+  return Math.min(0.85, accDisc + sBonus.breakDisc);
+}
+
+function getTotalTrainMultiplier() {
+  let accSpd = player.equipped.accessories.reduce((sum, a) => sum + (a.trainSpd || 0), 0);
+  let sBonus = getSkillTotalBonus();
+  return player.traitsMod.trainSpd + player.passives.trainBonus + accSpd + sBonus.train;
+}
+
+function getTotalLifespan() {
+  let sBonus = getSkillTotalBonus();
+  return player.baseLifespan + player.lifespanBonus + sBonus.life;
+}
+
+function getBreakthroughCost() {
+  let raw = 20 + (player.realmIdx + 1) * 16;
+  let discount = getBreakDiscount();
+  return Math.max(5, Math.floor(raw * (1 - discount)));
+}
+
+function hasVampire() {
+  let sBonus = getSkillTotalBonus();
+  return player.passives.vampire || player.equipped.weapons.some(w => !!w.vampire) || sBonus.vampire;
+}
+
+function gainTrait(trait) {
+  if (!trait) return;
+  if (player.selectedTraits.some(t => t.id === trait.id)) {
+    log(`神魂共鸣，【${trait.name}】命格威能再次升华！`);
+    return;
+  }
+  player.selectedTraits.push(trait);
+  trait.apply(player);
+  log(`<b style="color:var(--gold);">【天地异象 · 逆天改命！】后天觉醒命格【${trait.name}】！(${trait.desc})</b>`);
+}
+
+function passMonths(months) {
+  player.ageMonths += months;
+  while (player.ageMonths >= 12) {
+    player.ageMonths -= 12;
+    player.ageYears += 1;
+  }
+
+  let maxLifespan = getTotalLifespan();
+  if (player.ageYears >= maxLifespan) {
+    stopTrainHold();
+    alert(`【寿元耗尽 · 天人五衰】\n你在世修行 ${player.ageYears} 岁，大限已至，于洞府中安详坐化！\n真灵入六道重修来世！`);
+    resetGame(true);
+    return false;
+  } else if (maxLifespan - player.ageYears <= 10) {
+    log(`<span style="color:var(--hp); font-weight:bold;">⚠️ 寿元大限将至！仅余不足 ${maxLifespan - player.ageYears} 载，速速服药或突破延寿！</span>`);
+  }
+  return true;
+}
+
+function checkRandomChance() {
+  let chanceRate = 0.25 + (getTotalLuck() / 300);
+  if (Math.random() < chanceRate) {
+    let evt = CHANCE_EVENTS[Math.floor(Math.random() * CHANCE_EVENTS.length)];
+    triggerChanceModal(evt);
+  }
+}
+
+function triggerChanceModal(evt) {
+  stopTrainHold();
+  activeChance = evt;
+  document.getElementById('chance-title').innerText = evt.title;
+  document.getElementById('chance-desc').innerText = evt.desc;
+  document.getElementById('chance-modal').classList.remove('hidden');
+}
+
+function resolveChance(accept) {
+  if (!activeChance) return;
+  document.getElementById('chance-modal').classList.add('hidden');
+
+  if (!accept) {
+    log('你思虑再三，恐有大能禁制杀机，选择稳健避退，安然无损。');
+    activeChance = null;
+    updateUI();
+    saveGame();
+    return;
+  }
+
+  if (!passMonths(1)) return;
+
+  let isBad = Math.random() < 0.3333;
+
+  if (isBad) {
+    let hurt = Math.floor(30 + Math.random() * 20 + player.realmIdx * 6);
+    player.hp = Math.max(1, player.hp - hurt);
+    log(`<span style="color:var(--hp); font-weight:bold;">【机缘遇险·历劫受创】探寻消耗 1 个月。${activeChance.badText} 气血损失 ${hurt} 点！（保住心脉未亡）</span>`);
+  } else {
+    let resultMsg = activeChance.good(player);
+    log(`【功成造化】耗时 1 个月探秘圆满！${resultMsg}`);
+  }
+
+  activeChance = null;
+  updateUI();
+  saveGame();
+}
+
+function rollTraits() {
+  let shuffled = [...TRAIT_POOL].sort(() => 0.5 - Math.random());
+  rolled5Traits = shuffled.slice(0, 5);
+  pickedTraits = [];
+  renderTraitPicks();
+}
+
+function renderTraitPicks() {
+  const container = document.getElementById('trait-cards-container');
+  container.innerHTML = '';
+  document.getElementById('ui-pick-count').innerText = pickedTraits.length;
+  
+  const confirmBtn = document.getElementById('btn-confirm-traits');
+  if (pickedTraits.length === 3) {
+    confirmBtn.disabled = false;
+    confirmBtn.style.opacity = '1';
+    confirmBtn.innerText = '结定道基 (已选满3个)';
+  } else {
+    confirmBtn.disabled = true;
+    confirmBtn.style.opacity = '0.5';
+    confirmBtn.innerText = `结定道基 (还需选 ${3 - pickedTraits.length} 个)`;
+  }
+
+  rolled5Traits.forEach(t => {
+    const isSelected = pickedTraits.includes(t.id);
+    const card = document.createElement('div');
+    card.className = `trait-pick-card ${isSelected ? 'selected' : ''}`;
+    card.onclick = () => togglePickTrait(t.id);
+    
+    let tierText = t.tier === 'red' ? '神品' : t.tier === 'gold' ? '仙品' : t.tier === 'blue' ? '灵品' : '凡品';
+    card.innerHTML = `
+      <div style="flex:1;">
+        <div style="display:flex; align-items:center; gap:6px;">
+          <b class="t-${t.tier}">【${t.name}】</b>
+          <span style="font-size:10px; border:1px solid currentColor; padding:0 4px; border-radius:4px;" class="t-${t.tier}">${tierText}</span>
+        </div>
+        <div style="font-size:11px; color:var(--subtext); margin-top:2px;">${t.desc}</div>
+      </div>
+      <div style="font-size:18px; margin-left:8px;">${isSelected ? '✅' : '⚪'}</div>
+    `;
+    container.appendChild(card);
+  });
+}
+
+function togglePickTrait(id) {
+  if (pickedTraits.includes(id)) {
+    pickedTraits = pickedTraits.filter(i => i !== id);
+  } else {
+    if (pickedTraits.length >= 3) return;
+    pickedTraits.push(id);
+  }
+  renderTraitPicks();
+}
+
+function confirmTraits() {
+  if (pickedTraits.length !== 3) return;
+  player.selectedTraits = pickedTraits.map(id => TRAIT_POOL.find(t => t.id === id));
+  player.selectedTraits.forEach(t => t.apply(player));
+  document.getElementById('view-traits').classList.add('hidden');
+  document.getElementById('view-path').classList.remove('hidden');
+}
+
+function choosePath(chosen) {
+  player.path = chosen;
+  document.getElementById('view-path').classList.add('hidden');
+  const container = document.getElementById('sect-cards-container');
+  container.innerHTML = '';
+  SECT_POOL[chosen].forEach(s => {
+    const card = document.createElement('div');
+    card.className = 'card-item';
+    card.innerHTML = `
+      <div>
+        <b style="color:var(--accent); font-size:14px;">${s.name}</b>
+        <div style="font-size:11px; color:var(--subtext);">${s.desc}</div>
+        <div style="color:var(--gold); font-size:11px; margin-top:2px;">${s.perk}</div>
+      </div>
+      <button class="btn-sm" onclick="joinSect('${s.id}')">拜入</button>
+    `;
+    container.appendChild(card);
+  });
+  document.getElementById('view-sect').classList.remove('hidden');
+}
+
+function joinSect(sectId) {
+  const sect = SECT_POOL[player.path].find(s => s.id === sectId);
+  player.sect = sect.name;
+  sect.apply(player);
+  player.hp = getMaxHp();
+  document.getElementById('view-sect').classList.add('hidden');
+  document.getElementById('view-game').classList.remove('hidden');
+  log(`已拜入【${player.sect}】，大道启程！`);
+  updateUI();
+  saveGame();
+}
+
+function triggerTurnEnd() {
+  let maxHp = getMaxHp();
+  let sBonus = getSkillTotalBonus();
+  let totalRegen = player.traitsMod.regen + sBonus.regen;
+  if (totalRegen > 0 && player.hp < maxHp) {
+    player.hp = Math.min(maxHp, player.hp + totalRegen);
+  }
+}
+
+function renderEquippedSlots() {
+  document.getElementById('ui-cnt-weapons').innerText = player.equipped.weapons.length;
+  document.getElementById('ui-cnt-armors').innerText = player.equipped.armors.length;
+  document.getElementById('ui-cnt-accessories').innerText = player.equipped.accessories.length;
+
+  const wBox = document.getElementById('ui-slot-weapons');
+  wBox.innerHTML = player.equipped.weapons.length ? '' : '<div style="font-size:11px; color:#666;">暂未佩戴神兵</div>';
+  player.equipped.weapons.forEach((item, idx) => {
+    let div = document.createElement('div');
+    div.className = 'card-item';
+    div.style.padding = '4px 8px';
+    div.innerHTML = `
+      <span><b>${item.name}</b> <small style="color:var(--accent);">(+${item.atk}攻)</small></span>
+      <button class="btn-sm btn-danger" onclick="unequipItem('weapons', ${idx})">卸下</button>
+    `;
+    wBox.appendChild(div);
+  });
+
+  const aBox = document.getElementById('ui-slot-armors');
+  aBox.innerHTML = player.equipped.armors.length ? '' : '<div style="font-size:11px; color:#666;">暂未披挂宝甲</div>';
+  player.equipped.armors.forEach((item, idx) => {
+    let div = document.createElement('div');
+    div.className = 'card-item';
+    div.style.padding = '4px 8px';
+    div.innerHTML = `
+      <span><b>${item.name}</b> <small style="color:var(--blue);">(+${item.hp}血, 免伤${((item.tribResist||0)*100).toFixed(0)}%)</small></span>
+      <button class="btn-sm btn-danger" onclick="unequipItem('armors', ${idx})">卸下</button>
+    `;
+    aBox.appendChild(div);
+  });
+
+  const accBox = document.getElementById('ui-slot-accessories');
+  accBox.innerHTML = player.equipped.accessories.length ? '' : '<div style="font-size:11px; color:#666;">暂无饰品加持</div>';
+  player.equipped.accessories.forEach((item, idx) => {
+    let div = document.createElement('div');
+    div.className = 'card-item';
+    div.style.padding = '4px 8px';
+    div.innerHTML = `
+      <div style="font-size:11px;"><b>${item.name}</b> <span style="color:var(--gold);">${item.desc}</span></div>
+      <button class="btn-sm btn-danger" onclick="unequipItem('accessories', ${idx})">卸下</button>
+    `;
+    accBox.appendChild(div);
+  });
+}
+
+function updateUI() {
+  const cfg = PATHS[player.path];
+  const maxHp = getMaxHp();
+  const totalLifespan = getTotalLifespan();
+  const totalComp = getTotalComp();
+  const compDiscount = getCompDiscount();
+  
+  document.getElementById('ui-sect-path').innerText = `${player.sect} · ${player.path}`;
+  document.getElementById('ui-realm').innerText = cfg.realms[player.realmIdx];
+  
+  let mStr = player.ageMonths > 0 ? `${player.ageMonths}月` : '0月';
+  document.getElementById('ui-age-str').innerText = `${player.ageYears}岁${mStr}`;
+  document.getElementById('ui-lifespan').innerText = totalLifespan;
+  document.getElementById('ui-hp-txt').innerText = `${player.hp}/${maxHp}`;
+  
+  const hpPct = Math.max(0, Math.min(100, (player.hp / maxHp) * 100));
+  document.getElementById('ui-hp-bar').style.width = `${hpPct}%`;
+
+  const cost = getBreakthroughCost();
+  document.getElementById('ui-res-name').innerText = `${cfg.resName}蓄势`;
+  document.getElementById('ui-res-txt').innerText = `${player.specialRes}/${cost}`;
+  const resPct = Math.max(0, Math.min(100, (player.specialRes / cost) * 100));
+  document.getElementById('ui-res-bar').style.width = `${resPct}%`;
+
+  document.getElementById('ui-special-act-title').innerText = cfg.specialAct;
+  document.getElementById('ui-special-act-desc').innerText = cfg.specialDesc;
+
+  let wBonus = player.equipped.weapons.reduce((sum, w) => sum + (w.atk || 0), 0);
+  document.getElementById('ui-p-atk').innerText = `${getTotalAtk()} (神兵+${wBonus})`;
+  let spd = Math.round(getTotalTrainMultiplier() * 100);
+  document.getElementById('ui-p-spd').innerText = `${spd}%`;
+  
+  let sBonus = getSkillTotalBonus();
+  document.getElementById('ui-p-regen').innerText = `+${player.traitsMod.regen + sBonus.regen} HP/动`;
+  document.getElementById('ui-p-trib').innerText = `${(getTotalTribResist() * 100).toFixed(0)}%`;
+  document.getElementById('ui-p-breakdisc').innerText = `减免 ${(getBreakDiscount() * 100).toFixed(0)}% 消耗`;
+  document.getElementById('ui-p-luck').innerText = getTotalLuck();
+  document.getElementById('ui-p-comp').innerText = `${totalComp} (参悟减耗 ${(compDiscount * 100).toFixed(0)}%)`;
+  document.getElementById('ui-comp-discount').innerText = `${(compDiscount * 100).toFixed(0)}% (悟性 ${totalComp})`;
+  
+  let learnedCount = Object.keys(player.skillStages).filter(k => player.skillStages[k] > 0).length;
+  document.getElementById('ui-p-skill-count').innerText = learnedCount;
+  document.getElementById('ui-p-trait-count').innerText = player.selectedTraits.length;
+
+  document.getElementById('ui-p-traits').innerHTML = player.selectedTraits.map(t => 
+    `<span class="card-item t-${t.tier}" style="padding:2px 6px; font-size:10px; border:1px solid currentColor;">${t.name}</span>`
+  ).join('');
+
+  renderSkills();
+  renderBag();
+  renderEquippedSlots();
+}
+
+function switchTab(tabId, el) {
+  document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+  el.classList.add('active');
+  ['action', 'skills', 'bag', 'profile'].forEach(id => {
+    document.getElementById(`tab-${id}`).classList.add('hidden');
+  });
+  document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+}
+
+// ----------------------------------------------------
+// 【藏经阁渲染】：分阶展示入门/小成/大成/圆满状态与消耗
+// ----------------------------------------------------
+function renderSkills() {
+  const container = document.getElementById('ui-skills-list');
+  container.innerHTML = '';
+  const available = SKILL_DB.filter(s => s.path === '通用' || s.path === player.path);
+  const compDiscount = getCompDiscount();
+  
+  available.forEach(skill => {
+    let currentStage = player.skillStages[skill.id] || 0; // 0~4
+    const item = document.createElement('div');
+    item.className = 'card-item';
+    
+    let badgeClass = skill.rank === '天阶' ? 'badge-tian' : skill.rank === '地阶' ? 'badge-di' : skill.rank === '玄阶' ? 'badge-xuan' : 'badge-huang';
+    let stageName = SKILL_STAGE_NAMES[currentStage];
+    
+    // 计算下一层升级消耗（受悟性打折）
+    let isMax = currentStage >= 4;
+    let nextStageName = isMax ? '已大圆满' : SKILL_STAGE_NAMES[currentStage + 1];
+    let nextCost = 0;
+    if (!isMax) {
+      let mult = SKILL_STAGE_COST_MULT[currentStage] || 1.0;
+      let rawCost = Math.floor(skill.baseCost * mult);
+      nextCost = Math.max(5, Math.floor(rawCost * (1 - compDiscount)));
+    }
+
+    // 格式化功法描述
+    let multNow = STAGE_MULTIPLIERS[currentStage];
+    let multNext = isMax ? multNow : STAGE_MULTIPLIERS[currentStage + 1];
+
+    item.innerHTML = `
+      <div style="flex:1;">
+        <div style="display:flex; align-items:center; gap:6px;">
+          <span style="font-size:10px; padding:1px 5px; border-radius:4px; font-weight:bold;" class="${badgeClass}">${skill.rank}</span>
+          <b>${skill.name}</b>
+          <span class="stage-tag stage-${currentStage}">【${stageName}】</span>
+        </div>
+        <div style="font-size:11px; color:var(--subtext); margin-top:2px;">
+          ${skill.desc}
+          ${currentStage > 0 ? `<br><span style="color:var(--exp);">当前境界提供 ${multNow} 倍加成</span>` : ''}
+          ${!isMax ? `<span style="color:var(--gold);"> (突破后升为 ${multNext} 倍)</span>` : ''}
+        </div>
+      </div>
+      <button class="btn-sm" ${isMax ? 'disabled' : ''} onclick="upgradeSkill('${skill.id}')">
+        ${isMax ? '功德圆满' : `突破至${nextStageName}<br><small>(${nextCost} ${PATHS[player.path].resName})</small>`}
+      </button>
+    `;
+    container.appendChild(item);
+  });
+}
+
+function upgradeSkill(id) {
+  let currentStage = player.skillStages[id] || 0;
+  if (currentStage >= 4) return;
+  
+  let skill = SKILL_DB.find(s => s.id === id);
+  if (!skill) return;
+
+  let compDiscount = getCompDiscount();
+  let mult = SKILL_STAGE_COST_MULT[currentStage] || 1.0;
+  let cost = Math.max(5, Math.floor(skill.baseCost * mult * (1 - compDiscount)));
+
+  if (player.specialRes < cost) {
+    log(`<span style="color:var(--hp);">秘源不足！当前参悟【${skill.name}】至【${SKILL_STAGE_NAMES[currentStage + 1]}】尚需 ${cost} 点${PATHS[player.path].resName}。</span>`);
+    return;
+  }
+
+  player.specialRes -= cost;
+  player.skillStages[id] = currentStage + 1;
+  let newStageName = SKILL_STAGE_NAMES[player.skillStages[id]];
+
+  log(`<b style="color:var(--purple);">【功法进阶 · 道境升华！】悟性通明，【${skill.rank}·${skill.name}】突破至【${newStageName}境界】！威能大涨！</b>`);
+  updateUI();
+  saveGame();
+}
+
+function renderBag() {
+  const container = document.getElementById('ui-bag-list');
+  container.innerHTML = '';
+  if (player.inventory.length === 0) {
+    container.innerHTML = '<div style="color:var(--subtext); text-align:center; font-size:12px; padding:10px;">乾坤囊空空如也</div>';
+    return;
+  }
+  player.inventory.forEach((item, index) => {
+    const row = document.createElement('div');
+    row.className = 'card-item';
+    let typeTag = item.type === 'pill' ? '丹药' : item.type === 'weapon' ? '神兵' : item.type === 'armor' ? '仙甲' : '饰品';
+    row.innerHTML = `
+      <div>
+        <b>${item.name}</b> <small style="color:var(--accent);">[${typeTag}]</small> <span style="font-size:11px; color:var(--subtext);">x${item.count}</span>
+        <div style="font-size:11px; color:var(--gold);">${item.desc}</div>
+      </div>
+      <button class="btn-sm" onclick="useItem(${index})">${item.type === 'pill' ? '吞服' : '佩戴'}</button>
+    `;
+    container.appendChild(row);
+  });
+}
+
+function addItem(name, type, stats, desc) {
+  let found = player.inventory.find(i => i.name === name);
+  if (found) found.count++;
+  else player.inventory.push({ name, type, stats, desc, count: 1 });
+  updateUI();
+}
+
+function useItem(idx) {
+  const item = player.inventory[idx];
+  
+  if (item.type === 'pill') {
+    let maxHp = getMaxHp();
+    player.hp = Math.min(maxHp, player.hp + item.stats.heal);
+    log(`吞服【${item.name}】，气血回复 ${item.stats.heal} 点。`);
+  } else if (item.type === 'weapon') {
+    if (player.equipped.weapons.length >= 2) {
+      log('<span style="color:var(--gold);">双手已持满两柄神兵，需先卸下一柄！</span>');
+      return;
+    }
+    player.equipped.weapons.push({ name: item.name, atk: item.stats.atk, vampire: item.stats.vampire, desc: item.desc });
+    log(`祭出神兵【${item.name}】，攻伐暴涨 ${item.stats.atk} 点！`);
+  } else if (item.type === 'armor') {
+    if (player.equipped.armors.length >= 2) {
+      log('<span style="color:var(--blue);">身上已披挂两件仙甲，不可再套穿！</span>');
+      return;
+    }
+    player.equipped.armors.push({ name: item.name, hp: item.stats.hp, tribResist: item.stats.tribResist, desc: item.desc });
+    log(`披挂仙甲【${item.name}】，气血增益 ${item.stats.hp}，雷劫免伤提高！`);
+  } else if (item.type === 'accessory') {
+    if (player.equipped.accessories.length >= 10) {
+      log('<span style="color:var(--purple);">饰品已达 10 件上限，天地气机饱和！</span>');
+      return;
+    }
+    player.equipped.accessories.push({ 
+      name: item.name, 
+      luck: item.stats.luck || 0, 
+      breakDiscount: item.stats.breakDiscount || 0, 
+      trainSpd: item.stats.trainSpd || 0,
+      desc: item.desc 
+    });
+    log(`佩戴饰品【${item.name}】，获得大道福缘庇护！`);
+  }
+
+  item.count--;
+  if (item.count <= 0) player.inventory.splice(idx, 1);
+  updateUI();
+  saveGame();
+}
+
+function unequipItem(slotGroup, index) {
+  const item = player.equipped[slotGroup][index];
+  if (!item) return;
+
+  let type = slotGroup === 'weapons' ? 'weapon' : slotGroup === 'armors' ? 'armor' : 'accessory';
+  let stats = {};
+  if (type === 'weapon') stats = { atk: item.atk, vampire: item.vampire };
+  else if (type === 'armor') stats = { hp: item.hp, tribResist: item.tribResist };
+  else stats = { luck: item.luck, breakDiscount: item.breakDiscount, trainSpd: item.trainSpd };
+
+  addItem(item.name, type, stats, item.desc || '造化法宝');
+  player.equipped[slotGroup].splice(index, 1);
+
+  let maxHp = getMaxHp();
+  if (player.hp > maxHp) player.hp = maxHp;
+
+  log(`卸下法宝【${item.name}】，收归乾坤囊中。`);
+  updateUI();
+  saveGame();
+}
+
+let trainInterval = null;
+
+function executeNormalTrain(isAuto = false) {
+  if (!passMonths(0.5)) return;
+  
+  let baseGain = Math.floor(4 + Math.random() * 3 + player.realmIdx * 2);
+  let multiplier = getTotalTrainMultiplier();
+  let finalGain = Math.floor(baseGain * multiplier);
+  player.specialRes += finalGain;
+  triggerTurnEnd();
+  
+  if (!isAuto) {
+    log(`吐纳半月，周天运转，获得 ${finalGain} 点${PATHS[player.path].resName}。`);
+  }
+  updateUI();
+  
+  if (!isAuto || Math.random() < 0.05) {
+    checkRandomChance();
+  }
+}
+
+function doBigTrain() {
+  if (!passMonths(6)) return;
+  
+  let baseGain = Math.floor(50 + Math.random() * 20 + player.realmIdx * 25);
+  let multiplier = getTotalTrainMultiplier();
+  let finalGain = Math.floor(baseGain * multiplier);
+  player.specialRes += finalGain;
+  triggerTurnEnd();
+  
+  log(`闭关潜修半年（6个月），神清气爽，巨额暴涨 ${finalGain} 点${PATHS[player.path].resName}！`);
+  updateUI();
+  saveGame();
+  checkRandomChance();
+}
+
+function setupHoldToTrain() {
+  const btn = document.getElementById('btn-normal-train');
+
+  function startHold(e) {
+    if (e) e.preventDefault();
+    if (trainInterval) return;
+    btn.classList.add('pressing');
+    executeNormalTrain(false);
+    trainInterval = setInterval(() => {
+      executeNormalTrain(true);
+    }, 120);
+  }
+
+  function endHold(e) {
+    if (e) e.preventDefault();
+    stopTrainHold();
+  }
+
+  btn.addEventListener('mousedown', startHold);
+  btn.addEventListener('mouseup', endHold);
+  btn.addEventListener('mouseleave', endHold);
+
+  btn.addEventListener('touchstart', startHold, { passive: false });
+  btn.addEventListener('touchend', endHold, { passive: false });
+  btn.addEventListener('touchcancel', endHold, { passive: false });
+}
+
+function stopTrainHold() {
+  if (trainInterval) {
+    clearInterval(trainInterval);
+    trainInterval = null;
+    const btn = document.getElementById('btn-normal-train');
+    if (btn) btn.classList.remove('pressing');
+    saveGame();
+  }
+}
+
+function doAdventure() {
+  if (!passMonths(6)) return;
+  triggerTurnEnd();
+  const majorRealmIdx = Math.floor(player.realmIdx / 4);
+  const totalLuck = getTotalLuck();
+  const luckFactor = totalLuck / 100;
+  const roll = Math.random() - luckFactor * 0.25;
+
+  if (Math.random() < 0.10 + luckFactor * 0.08) {
+    let unobtained = FORTUNE_TRAIT_POOL.filter(ft => !player.selectedTraits.some(st => st.id === ft.id));
+    if (unobtained.length > 0) {
+      let awarded = unobtained[Math.floor(Math.random() * unobtained.length)];
+      gainTrait(awarded);
+      updateUI();
+      saveGame();
+      return;
+    }
+  }
+
+  if (roll < 0.35) {
+    const mobTiers = ['山涧青竹蛇', '黑煞狂熊', '血窟老魔', '元神法相', '上古蛟龙', '虚空遁地兽', '混沌古魔', '渡劫凶兽', '灭世真灵'];
+    const mobName = mobTiers[Math.min(majorRealmIdx, mobTiers.length - 1)];
+    const mobAtk = 10 + player.realmIdx * 8;
+
+    log(`历练半年，密林中遭遇强敌【${mobName}】！`);
+    if (getTotalAtk() >= mobAtk) {
+      let lootRes = 50 + player.realmIdx * 16;
+      if (player.passives.lootBonus > 0) lootRes = Math.floor(lootRes * (1 + player.passives.lootBonus));
+      player.specialRes += lootRes;
+      
+      let msg = '';
+      if (hasVampire()) {
+        player.hp = Math.min(getMaxHp(), player.hp + 50);
+        msg = '，吞血摄生大幅回血(+50 HP)';
+      }
+      log(`挥手斩灭妖凶！缴获 ${lootRes} 点${PATHS[player.path].resName}${msg}。`);
+      
+      if (Math.random() < (0.5 + luckFactor * 0.3)) {
+        addItem('九叶草还丹', 'pill', {heal: 100 + player.realmIdx * 40}, '九转气血神丹');
+        log(`<b style="color:var(--gold);">搜得珍品【九叶草还丹】！</b>`);
+      }
+    } else {
+      const hurt = Math.floor(15 + player.realmIdx * 4);
+      player.hp = Math.max(1, player.hp - hurt);
+      log(`<span style="color:var(--hp);">略有挂彩，损失气血 ${hurt} 点！</span>`);
+    }
+  } else if (roll < 0.90) {
+    const gearRoll = Math.random();
+    if (gearRoll < 0.33) {
+      const weapons = [
+        { n: '太白庚金剑', atk: 45 + player.realmIdx * 18 },
+        { n: '开天断魄神斧', atk: 60 + player.realmIdx * 22 },
+        { n: '定海如意神针', atk: 75 + player.realmIdx * 25 },
+        { n: '九幽噬魂邪刃', atk: 55 + player.realmIdx * 20, vampire: true },
+        { n: '诛仙灭神古剑', atk: 95 + player.realmIdx * 30 }
+      ];
+      const w = weapons[Math.min(majorRealmIdx, weapons.length - 1)];
+      addItem(w.n, 'weapon', {atk: w.atk, vampire: w.vampire}, `绝世神兵 攻击+${w.atk}`);
+      log(`<b style="color:var(--accent);">古修遗府中觅得绝世神兵【${w.n}】！</b>`);
+    } else if (gearRoll < 0.66) {
+      const armors = [
+        { n: '天蚕流云仙袍', hp: 120 + player.realmIdx * 50, trib: 0.15 },
+        { n: '玄武磐石宝铠', hp: 180 + player.realmIdx * 70, trib: 0.25 },
+        { n: '八卦紫绶羽衣', hp: 260 + player.realmIdx * 90, trib: 0.30 },
+        { n: '太虚玄天神甲', hp: 400 + player.realmIdx * 120, trib: 0.40 }
+      ];
+      const a = armors[Math.min(majorRealmIdx, armors.length - 1)];
+      addItem(a.n, 'armor', {hp: a.hp, tribResist: a.trib}, `宝甲 气血+${a.hp}, 免伤${(a.trib*100).toFixed(0)}%`);
+      log(`<b style="color:var(--blue);">探得古修神甲【${a.n}】！</b>`);
+    } else {
+      const accessories = [
+        { n: '七宝聚灵玄戒', luck: 25, breakDiscount: 0.12, trainSpd: 0.3, desc: '气运+25, 突破减免12%, 修炼+30%' },
+        { n: '定风避火珠', luck: 35, breakDiscount: 0.18, trainSpd: 0.2, desc: '气运+35, 突破减免18%' },
+        { n: '造化通天金玉佩', luck: 55, breakDiscount: 0.25, trainSpd: 0.4, desc: '气运+55, 突破减免25%, 修炼+40%' },
+        { n: '混沌无极道珠', luck: 80, breakDiscount: 0.35, trainSpd: 0.6, desc: '气运+80, 突破减免35%, 修炼+60%' }
+      ];
+      const acc = accessories[Math.min(majorRealmIdx, accessories.length - 1)];
+      addItem(acc.n, 'accessory', {luck: acc.luck, breakDiscount: acc.breakDiscount, trainSpd: acc.trainSpd}, acc.desc);
+      log(`<b style="color:var(--gold);">拾得极品饰品【${acc.n}】！</b>`);
+    }
+  } else {
+    log('<b style="color:var(--gold);">气运浩荡，古修残阵对你毫无影响，安然走过！</b>');
+  }
+  updateUI();
+  saveGame();
+  checkRandomChance();
+}
+
+function triggerBreakthrough() {
+  const cfg = PATHS[player.path];
+  if (player.realmIdx >= cfg.realms.length - 1) {
+    log(`<b style="color:var(--gold);">已达九天混元不磨真仙大道，跳出三界寿与天齐！</b>`);
+    return;
+  }
+  const cost = getBreakthroughCost();
+  if (player.specialRes < cost) {
+    log(`底蕴不足！需积蓄 ${cost} 点${cfg.resName}。`);
+    return;
+  }
+  
+  if (!passMonths(6)) return;
+
+  const isMajor = (player.realmIdx + 1) % 4 === 0;
+  player.specialRes -= cost;
+  
+  let rawDmg = isMajor ? (25 + player.realmIdx * 12) : (8 + player.realmIdx * 4);
+  let tribDmg = Math.floor(rawDmg * (1 - getTotalTribResist()));
+
+  if (isMajor) log(`<b style="color:var(--hp);">大境界关隘引动九霄天劫，雷暴倾泻！</b>`);
+  
+  if (player.hp > tribDmg) {
+    player.hp -= tribDmg;
+    player.realmIdx++;
+    player.baseHp += isMajor ? 120 : 45;
+    player.hp = getMaxHp();
+    player.baseAtk += isMajor ? 35 : 15;
+    
+    let extraLifespan = 0;
+    if (isMajor) {
+      let majorTier = Math.floor(player.realmIdx / 4) - 1;
+      extraLifespan = REALM_LIFESPAN_REWARDS[Math.min(majorTier, REALM_LIFESPAN_REWARDS.length - 1)] || 100;
+      player.lifespanBonus += extraLifespan;
+    } else {
+      player.lifespanBonus += 5;
+    }
+
+    log(`<b style="color:var(--exp);">【破境功成！】轻松渡劫，登临【${cfg.realms[player.realmIdx]}】！${extraLifespan > 0 ? `逆天改命，寿元大限暴涨 +${extraLifespan} 岁！` : '寿元+5岁。'}</b>`);
+  } else {
+    player.hp = 10;
+    log(`<span style="color:var(--hp);">气血震荡险些兵解，元神已护，速服丹药！</span>`);
+  }
+  updateUI();
+  saveGame();
+  checkRandomChance();
+}
+
+function doSpecialAction() {
+  triggerTurnEnd();
+  if (player.path === '练气') {
+    if (player.specialRes < 20) { log('真元不足。'); return; }
+    player.specialRes -= 20;
+    player.baseAtk += 8;
+    log('以三昧真火温养飞剑，双持锋芒毕露（攻击永久+8）！');
+  } else if (player.path === '武道') {
+    if (player.hp <= 20) { log('气血稍亏。'); return; }
+    player.hp -= 15;
+    player.baseHp += 30;
+    player.baseAtk += 10;
+    log('逆冲血煞淬骨（微损气血-15），体魄暴涨（生命上限+30，战力+10）！');
+  } else if (player.path === '佛教') {
+    player.specialRes += 30;
+    player.hp = getMaxHp();
+    log('大日佛光普照，全伤痊愈，愿力充盈！');
+  } else if (player.path === '道教') {
+    if (player.specialRes < 15) { log('功德不足。'); return; }
+    player.specialRes -= 15;
+    player.baseAtk += 6;
+    player.baseHp += 25;
+    player.hp = Math.min(player.hp + 40, getMaxHp());
+    log('请神附体，太上老君急急如律令，攻防暴涨！');
+  }
+  updateUI();
+  saveGame();
+  checkRandomChance();
+}
+
+function saveGame() {
+  if (!player.path || !player.sect) return;
+  localStorage.setItem('Xiuxian_SaveData_V17', JSON.stringify(player));
+}
+
+function loadGame() {
+  const raw = localStorage.getItem('Xiuxian_SaveData_V17');
+  if (raw) {
+    try {
+      player = JSON.parse(raw);
+      if (!Array.isArray(player.equipped.weapons)) {
+        let oldW = player.equipped.weapon ? [player.equipped.weapon] : [];
+        let oldA = player.equipped.armor ? [player.equipped.armor] : [];
+        let oldAcc = player.equipped.accessory ? [player.equipped.accessory] : [];
+        player.equipped = { weapons: oldW, armors: oldA, accessories: oldAcc };
+      }
+      if (player.ageYears === undefined) player.ageYears = player.age || 18;
+      if (player.ageMonths === undefined) player.ageMonths = 0;
+      if (!player.baseLifespan) player.baseLifespan = 120;
+      if (player.lifespanBonus === undefined) player.lifespanBonus = 0;
+      if (player.baseComp === undefined) player.baseComp = 20;
+      if (!player.skillStages) player.skillStages = {};
+
+      document.getElementById('view-traits').classList.add('hidden');
+      document.getElementById('view-path').classList.add('hidden');
+      document.getElementById('view-sect').classList.add('hidden');
+      document.getElementById('view-game').classList.remove('hidden');
+      log('宿慧苏醒，仙缘重聚。');
+      updateUI();
+    } catch (e) {
+      console.error(e);
+    }
+  } else {
+    rollTraits();
+  }
+}
+
+function resetGame(silent = false) {
+  stopTrainHold();
+  if (silent || confirm("确定要兵解轮回吗？所有神装与万载修为将尽数归虚。")) {
+    localStorage.removeItem('Xiuxian_SaveData_V17');
+    location.reload();
+  }
+}
+
+window.onload = () => {
+  loadGame();
+  setupHoldToTrain();
+};
+</script>
+</body>
+</html>
