@@ -70,7 +70,7 @@
   <header class="w-full max-w-5xl flex justify-between items-center py-2 px-3 border-b border-stone-800 mb-3">
     <div class="flex items-center space-x-2">
       <span class="text-2xl">☯️</span>
-      <h1 class="text-lg sm:text-xl font-bold font-calligraphy text-amber-300 tracking-wider">问道长生</h1>
+      <h1 class="text-lg sm:text-xl font-bold font-calligraphy text-amber-300 tracking-wider">修仙模拟器 · 问道长生</h1>
     </div>
     <div class="flex items-center space-x-2">
       <button onclick="saveGame(true)" class="px-2.5 py-1 text-xs rounded bg-stone-800 hover:bg-stone-700 text-stone-300 border border-stone-700 transition">
@@ -155,226 +155,125 @@
     ];
 
     const FATE_TRAITS_DATABASE = [
-      { id: "t_t1", name: "先天灵体", tier: "天阶", colorClass: "tier-tian", desc: "体质+35，悟性+25", comp: 25, luck: 15, phys: 35, charm: 10, bonusAge: 0 },
-      { id: "t_t2", name: "五行圣体", tier: "天阶", colorClass: "tier-tian", desc: "幸运+45，破境无阻", comp: 15, luck: 45, phys: 15, charm: 15, bonusAge: 0 },
-      { id: "t_t3", name: "混沌道体", tier: "天阶", colorClass: "tier-tian", desc: "颜值+40，悟性+30", comp: 30, luck: 15, phys: 10, charm: 40, bonusAge: 0 },
-      { id: "t_t4", name: "太阳之体", tier: "天阶", colorClass: "tier-tian", desc: "四维全+20，战力无双", comp: 20, luck: 20, phys: 20, charm: 20, bonusAge: 0 },
-      { id: "t_t5", name: "太阴之体", tier: "天阶", colorClass: "tier-tian", desc: "体质+30，寿元+100载", comp: 15, luck: 20, phys: 30, charm: 15, bonusAge: 100 },
+      { id: "t_t1", name: "鸿蒙神骨", tier: "天阶", colorClass: "tier-tian", desc: "体质+35，悟性+25", comp: 25, luck: 15, phys: 35, charm: 10, bonusAge: 0 },
+      { id: "t_t2", name: "天道私生子", tier: "天阶", colorClass: "tier-tian", desc: "幸运+45，破境无阻", comp: 15, luck: 45, phys: 15, charm: 15, bonusAge: 0 },
+      { id: "t_t3", name: "谪仙临尘", tier: "天阶", colorClass: "tier-tian", desc: "颜值+40，悟性+30", comp: 30, luck: 15, phys: 10, charm: 40, bonusAge: 0 },
+      { id: "t_t4", name: "独断万古", tier: "天阶", colorClass: "tier-tian", desc: "四维全+20，战力无双", comp: 20, luck: 20, phys: 20, charm: 20, bonusAge: 0 },
+      { id: "t_t5", name: "天凤涅槃", tier: "天阶", colorClass: "tier-tian", desc: "体质+30，寿元+100载", comp: 15, luck: 20, phys: 30, charm: 15, bonusAge: 100 },
       { id: "t_d1", name: "气运之子", tier: "地阶", colorClass: "tier-di", desc: "幸运+25", comp: 8, luck: 25, phys: 5, charm: 5, bonusAge: 0 },
-      { id: "t_d2", name: "寿元绵长", tier: "地阶", colorClass: "tier-di", desc: "悟性+26", comp: 26, luck: 5, phys: 5, charm: 8, bonusAge: 0 },
+      { id: "t_d2", name: "七窍玲珑心", tier: "地阶", colorClass: "tier-di", desc: "悟性+26", comp: 26, luck: 5, phys: 5, charm: 8, bonusAge: 0 },
       { id: "t_d3", name: "诛仙剑胎", tier: "地阶", colorClass: "tier-di", desc: "体质+18，悟性+16", comp: 16, luck: 6, phys: 18, charm: 5, bonusAge: 0 },
-      { id: "t_d4", name: "福缘深厚", tier: "地阶", colorClass: "tier-di", desc: "体质+26", comp: 5, luck: 8, phys: 26, charm: 5, bonusAge: 0 },
-      { id: "t_d5", name: "万劫不磨", tier: "地阶", colorClass: "tier-di", desc: "颜值+28", comp: 6, luck: 10, phys: 5, charm: 28, bonusAge: 0 },
-      { id: "t_x1", name: "名传一方", tier: "玄阶", colorClass: "tier-xuan", desc: "悟性+12，体质+6", comp: 12, luck: 3, phys: 6, charm: 2 },
-      { id: "t_x2", name: "奇才天授", tier: "玄阶", colorClass: "tier-xuan", desc: "体质+15", comp: 2, luck: 2, phys: 15, charm: 2 },
+      { id: "t_d4", name: "九转金身", tier: "地阶", colorClass: "tier-di", desc: "体质+26", comp: 5, luck: 8, phys: 26, charm: 5, bonusAge: 0 },
+      { id: "t_d5", name: "风华绝代", tier: "地阶", colorClass: "tier-di", desc: "颜值+28", comp: 6, luck: 10, phys: 5, charm: 28, bonusAge: 0 },
+      { id: "t_x1", name: "剑气纵横", tier: "玄阶", colorClass: "tier-xuan", desc: "悟性+12，体质+6", comp: 12, luck: 3, phys: 6, charm: 2 },
+      { id: "t_x2", name: "身强体健", tier: "玄阶", colorClass: "tier-xuan", desc: "体质+15", comp: 2, luck: 2, phys: 15, charm: 2 },
       { id: "t_x3", name: "灵犀一点", tier: "玄阶", colorClass: "tier-xuan", desc: "悟性+15", comp: 15, luck: 3, phys: 2, charm: 2 },
       { id: "t_x4", name: "洪福齐天", tier: "玄阶", colorClass: "tier-xuan", desc: "幸运+15", comp: 2, luck: 15, phys: 2, charm: 3 },
       { id: "t_x5", name: "仙姿玉色", tier: "玄阶", colorClass: "tier-xuan", desc: "颜值+16", comp: 2, luck: 4, phys: 2, charm: 16 },
-      { id: "t_h1", name: "勤苦补拙", tier: "黄阶", colorClass: "tier-huang", desc: "悟性+6", comp: 6, luck: 1, phys: 1, charm: 1 },
+      { id: "t_h1", name: "勤能补拙", tier: "黄阶", colorClass: "tier-huang", desc: "悟性+6", comp: 6, luck: 1, phys: 1, charm: 1 },
       { id: "t_h2", name: "天生神力", tier: "黄阶", colorClass: "tier-huang", desc: "体质+6", comp: 1, luck: 1, phys: 6, charm: 1 },
       { id: "t_h3", name: "心清目明", tier: "黄阶", colorClass: "tier-huang", desc: "悟性+5，幸运+2", comp: 5, luck: 2, phys: 1, charm: 1 },
       { id: "t_h4", name: "小有福报", tier: "黄阶", colorClass: "tier-huang", desc: "幸运+7", comp: 1, luck: 7, phys: 1, charm: 1 },
       { id: "t_h5", name: "眉目英挺", tier: "黄阶", colorClass: "tier-huang", desc: "颜值+7", comp: 1, luck: 1, phys: 1, charm: 7 },
       { id: "t_p1", name: "市井平庸", tier: "凡品", colorClass: "tier-fan", desc: "平平无奇", comp: 1, luck: 1, phys: 1, charm: 1 },
-      { id: "t_p2", name: "资质平庸", tier: "凡品", colorClass: "tier-fan", desc: "悟性+1，体质+1", comp: 1, luck: 1, phys: 1, charm: 1 },
-      { id: "t_p3", name: "福缘一般", tier: "凡品", colorClass: "tier-fan", desc: "幸运+2", comp: 1, luck: 2, phys: 1, charm: 1 },
-      { id: "t_p4", name: "相貌普通", tier: "凡品", colorClass: "tier-fan", desc: "颜值+2", comp: 1, luck: 1, phys: 1, charm: 2 },
       { id: "t_f1", name: "经脉滞涩", tier: "负面", colorClass: "tier-fu", desc: "体质-5", comp: 0, luck: 0, phys: -5, charm: 0 },
-      { id: "t_f2", name: "不祥之体", tier: "负面", colorClass: "tier-fu", desc: "悟性-6", comp: -6, luck: 0, phys: 0, charm: 0 },
-      { id: "t_f3", name: "命途多舛", tier: "负面", colorClass: "tier-fu", desc: "幸运-8", comp: 0, luck: -8, phys: 0, charm: 0 },
-      { id: "t_f4", name: "相貌平庸", tier: "负面", colorClass: "tier-fu", desc: "颜值-7", comp: 0, luck: 0, phys: 0, charm: -7 },
-      { id: "t_f5", name: "资质平庸", tier: "负面", colorClass: "tier-fu", desc: "悟性-4，体质-4", comp: -4, luck: 0, phys: -4, charm: 0 },
-      { id: "t_f6", name: "福缘薄弱", tier: "负面", colorClass: "tier-fu", desc: "幸运-10", comp: 0, luck: -10, phys: 0, charm: 0 },
-      { id: "t_f7", name: "相貌丑陋", tier: "负面", colorClass: "tier-fu", desc: "颜值-12", comp: 0, luck: 0, phys: 0, charm: -12 },
-      { id: "t_f8", name: "资质低下", tier: "负面", colorClass: "tier-fu", desc: "悟性-8，体质-8", comp: -8, luck: 0, phys: -8, charm: 0 },
+      { id: "t_f2", name: "愚顽不化", tier: "负面", colorClass: "tier-fu", desc: "悟性-6", comp: -6, luck: 0, phys: 0, charm: 0 },
       { id: "t_cf1", name: "天煞孤星", tier: "非常负面", colorClass: "tier-chao", desc: "幸运-20，体质-5", comp: 0, luck: -20, phys: -5, charm: -5 },
-      { id: "t_cf2", name: "九绝断脉", tier: "非常负面", colorClass: "tier-chao", desc: "体质-22，寿元-20", comp: 0, luck: 0, phys: -22, charm: 0, bonusAge: -20 },
-      { id: "t_cf3", name: "命犯孤煞", tier: "非常负面", colorClass: "tier-chao", desc: "幸运-15，悟性-10，体质-10", comp: -10, luck: -15, phys: -10, charm: -5, bonusAge: 0 },
-      { id: "t_cf4", name: "天生残疾", tier: "非常负面", colorClass: "tier-chao", desc: "体质-30，悟性-10，颜值-10", comp: -10, luck: 0, phys: -30, charm: -10, bonusAge: 0 }
+      { id: "t_cf2", name: "九绝断脉", tier: "非常负面", colorClass: "tier-chao", desc: "体质-22，寿元-20", comp: 0, luck: 0, phys: -22, charm: 0, bonusAge: -20 }
     ];
 
     const SECTS = [
-      { id: "s_tianjian", name: "天剑山", type: "纯粹的剑修大派，讲究一剑破万法。", faction: "righteous", icon: "⚔️" },
-      { id: "s_qingxu", name: "清虚门", type: "出尘脱俗、以清静无为闻名的名门大派。", faction: "righteous", icon: "🍃" },
-      { id: "s_jingang", name: "金刚寺", type: "主修金刚不坏身、镇压魔土的佛门武宗。", faction: "righteous", icon: "📿" },
-      { id: "s_yaowang", name: "药王谷", type: "医道双修、悬壶济世的正道圣地。", faction: "righteous", icon: "💊" },
-      { id: "s_hehuan", name: "合欢宗", type: "以男女双修、采补之道、魅惑众生闻名的魔道大派。", faction: "evil", icon: "🌸" },
-      { id: "s_wandu", name: "万毒门", type: "以剧毒、蛊虫、腐蚀万物闻名的剧毒魔宗。", faction: "evil", icon: "🦂" },
-      { id: "s_tiansha", name: "天煞宗", type: "命犯天煞、百无禁忌的绝灭魔修大派。", faction: "evil", icon: "🩸" },
-      { id: "rogue", name: "散修盟", type: "由各路散修组成的联盟，行事自由、无拘无束。", faction: "neutral", icon: "🦅" }
+      { id: "s_qingyun", name: "青云剑宗", type: "正道第一大宗", faction: "righteous", icon: "⚔️" },
+      { id: "s_danding", name: "丹鼎圣宗", type: "正道仙药圣地", faction: "righteous", icon: "⚗️" },
+      { id: "s_haoran", name: "浩然正气阁", type: "正道儒门圣宗", faction: "righteous", icon: "📜" },
+      { id: "s_puti", name: "无相菩提寺", type: "正道佛门古刹", faction: "righteous", icon: "📿" },
+      { id: "s_xuanji", name: "天枢璇玑宫", type: "正道星卜仙宗", faction: "righteous", icon: "✨" },
+      { id: "s_xuesha", name: "血煞魔门", type: "魔道凶残巨擘", faction: "evil", icon: "🩸" },
+      { id: "s_hehuan", name: "合欢幽谷", type: "魔道魅惑宗派", faction: "evil", icon: "🌸" },
+      { id: "s_lianshi", name: "九幽炼尸宗", type: "魔道幽冥死派", faction: "evil", icon: "⚰️" },
+      { id: "s_wandu", name: "万毒噬天殿", type: "魔道凶绝毒宗", faction: "evil", icon: "🦂" },
+      { id: "rogue", name: "天地散修盟", type: "自由散修联盟", faction: "neutral", icon: "🦅" }
+
+
     ];
 
+    // ==========================================
+    // 💡 固定且不生成的装备、功法与神兽数据库
+    // ==========================================
     const WEAPONS_DATABASE = [
-      { id: "w_t_1", name: "焚天紫炎枪", tier: TIERS.t_up, atk: 650, def: 120, price: 12800 },
-      { id: "w_t_2", name: "雷霆破邪锤", tier: TIERS.t_up, atk: 720, def: 150, price: 15000 },
-      { id: "w_t_3", name: "封魔镇灵戟", tier: TIERS.t_up, atk: 700, def: 100, price: 14000 },
-      { id: "w_t_4", name: "阴阳两仪剑", tier: TIERS.t_up, atk: 750, def: 160, price: 16000 },
-      { id: "w_t_5", name: "混元无极刀", tier: TIERS.t_up, atk: 800, def: 200, price: 18000 },
-      { id: "w_t_6", name: "九天雷霆剑", tier: TIERS.t_up, atk: 850, def: 220, price: 20000 },
-      { id: "w_t_7", name: "万象乾坤杖", tier: TIERS.t_up, atk: 900, def: 250, price: 22000 },
-      { id: "w_t_8", name: "太极无极剑", tier: TIERS.t_up, atk: 950, def: 300, price: 25000 },
-
+      { id: "w_t_1", name: "诛仙古剑", tier: TIERS.t_up, atk: 650, def: 120, price: 12800 },
+      { id: "w_t_2", name: "轩辕黄金神剑", tier: TIERS.t_up, atk: 720, def: 150, price: 15000 },
+      { id: "w_t_3", name: "弑神屠魔魔刀", tier: TIERS.t_up, atk: 700, def: 100, price: 14000 },
       { id: "w_d_1", name: "纯阳紫气剑", tier: TIERS.d_up, atk: 380, def: 70, price: 5200 },
       { id: "w_d_2", name: "七星龙渊剑", tier: TIERS.d_up, atk: 420, def: 80, price: 6000 },
       { id: "w_d_3", name: "修罗血影刃", tier: TIERS.d_up, atk: 400, def: 60, price: 5800 },
-      { id: "w_d_4", name: "九幽冥王剑", tier: TIERS.d_up, atk: 450, def: 90, price: 6200 },
-      { id: "w_d_5", name: "玄冰寒光剑", tier: TIERS.d_up, atk: 480, def: 100, price: 6500 },
-      { id: "w_d_6", name: "烈焰赤霄剑", tier: TIERS.d_up, atk: 500, def: 110, price: 6800 },
-      { id: "w_d_7", name: "破甲金刚刃", tier: TIERS.d_up, atk: 520, def: 120, price: 7000 },
-      { id: "w_d_8", name: "青锋古剑", tier: TIERS.d_up, atk: 550, def: 130, price: 7500 },
-
-      { id: "w_x_1", name: "青锋剑", tier: TIERS.x_up, atk: 180, def: 30, price: 1500 },
-      { id: "w_x_2", name: "金刚刃", tier: TIERS.x_up, atk: 210, def: 35, price: 1800 },
-      { id: "w_x_3", name: "定灵锤", tier: TIERS.x_up, atk: 200, def: 25, price: 1700 },
-      { id: "w_x_4", name: "镇邪锏", tier: TIERS.x_up, atk: 220, def: 40, price: 1900 },
-      { id: "w_x_5", name: "焚天刀", tier: TIERS.x_up, atk: 230, def: 45, price: 2000 },
-      { id: "w_x_6", name: "吞星杖", tier: TIERS.x_up, atk: 240, def: 50, price: 2100 },
-      { id: "w_x_7", name: "寒冰刃", tier: TIERS.x_up, atk: 250, def: 55, price: 2200 },
-      { id: "w_x_8", name: "赤霄剑", tier: TIERS.x_up, atk: 260, def: 60, price: 2300 },
-
-      { id: "w_h_1", name: "铁胎弓", tier: TIERS.h_up, atk: 65, def: 10, price: 300 },
-      { id: "w_h_2", name: "穿云弓", tier: TIERS.h_up, atk: 45, def: 5, price: 150 },
-      { id: "w_h_3", name: "盘龙棍", tier: TIERS.h_up, atk: 55, def: 8, price: 200 },
-      { id: "w_h_4", name: "霸王枪", tier: TIERS.h_up, atk: 60, def: 9, price: 250 },
-      { id: "w_h_5", name: "柳叶刀", tier: TIERS.h_up, atk: 70, def: 12, price: 350 },
-      { id: "w_h_6", name: "精钢剑", tier: TIERS.h_up, atk: 75, def: 15, price: 400 },
-      { id: "w_h_7", name: "峨嵋刺", tier: TIERS.h_up, atk: 80, def: 18, price: 450 },
-      { id: "w_h_8", name: "开山斧", tier: TIERS.h_up, atk: 85, def: 20, price: 500 }
+      { id: "w_x_1", name: "青锋古剑", tier: TIERS.x_up, atk: 180, def: 30, price: 1500 },
+      { id: "w_x_2", name: "破甲金刚刃", tier: TIERS.x_up, atk: 210, def: 35, price: 1800 },
+      { id: "w_h_1", name: "精钢长剑", tier: TIERS.h_up, atk: 65, def: 10, price: 300 },
+      { id: "w_h_2", name: "新手短刃", tier: TIERS.h_up, atk: 45, def: 5, price: 150 }
     ];
 
     const ARMORS_DATABASE = [
-      { id: "a_t_1", name: "太上玄武铠", tier: TIERS.t_up, def: 550, hp: 6000, price: 13000 },
-      { id: "a_t_2", name: "紫府七星冠", tier: TIERS.t_up, def: 500, hp: 6500, price: 14000 },
-      { id: "a_t_3", name: "凤羽织霞衣", tier: TIERS.t_up, def: 600, hp: 5500, price: 15000 },
-      { id: "a_t_4", name: "四象护体铠", tier: TIERS.t_up, def: 650, hp: 5000, price: 16000 },
-      { id: "a_t_5", name: "七窍玲珑甲", tier: TIERS.t_up, def: 700, hp: 4800, price: 17000 },
-      { id: "a_t_6", name: "封魔镇灵铠", tier: TIERS.t_up, def: 750, hp: 4600, price: 18000 },
-      { id: "a_t_7", name: "焚天紫炎袍", tier: TIERS.t_up, def: 800, hp: 4400, price: 19000 },
-      { id: "a_t_8", name: "阴阳两仪衣", tier: TIERS.t_up, def: 850, hp: 4200, price: 20000 },
-
-      { id: "a_d_1", name: "紫金八卦袍", tier: TIERS.d_up, def: 280, hp: 3200, price: 5500 },
-      { id: "a_d_2", name: "血煞魔骨甲", tier: TIERS.d_up, def: 300, hp: 3000, price: 5600 },
-      { id: "a_d_3", name: "玄冰寒光甲", tier: TIERS.d_up, def: 320, hp: 2800, price: 5700 },
-      { id: "a_d_4", name: "烈焰赤霄袍", tier: TIERS.d_up, def: 340, hp: 2600, price: 5800 },
-      { id: "a_d_5", name: "九幽冥王衣", tier: TIERS.d_up, def: 360, hp: 2400, price: 5900 },
-      { id: "a_d_6", name: "破甲金刚甲", tier: TIERS.d_up, def: 380, hp: 2200, price: 6000 },
-      { id: "a_d_7", name: "青锋古战袍", tier: TIERS.d_up, def: 400, hp: 2000, price: 6100 },
-      { id: "a_d_8", name: "纯阳紫气衣", tier: TIERS.d_up, def: 420, hp: 1800, price: 6200 },
-
+      { id: "a_t_1", name: "太上玄武不灭铠", tier: TIERS.t_up, def: 550, hp: 6000, price: 13000 },
+      { id: "a_t_2", name: "九霄御雷仙甲", tier: TIERS.t_up, def: 500, hp: 6500, price: 14000 },
+      { id: "a_d_1", name: "紫金八卦战袍", tier: TIERS.d_up, def: 280, hp: 3200, price: 5500 },
+      { id: "a_d_2", name: "血煞魔骨战甲", tier: TIERS.d_up, def: 300, hp: 3000, price: 5600 },
       { id: "a_x_1", name: "金丝软甲", tier: TIERS.x_up, def: 130, hp: 1200, price: 1600 },
       { id: "a_x_2", name: "玄铁重铠", tier: TIERS.x_up, def: 150, hp: 1400, price: 1900 },
-      { id: "a_x_3", name: "碧玉轻甲", tier: TIERS.x_up, def: 170, hp: 1600, price: 2200 },
-      { id: "a_x_4", name: "紫晶战袍", tier: TIERS.x_up, def: 190, hp: 1800, price: 2500 },
-      { id: "a_x_5", name: "赤金护甲", tier: TIERS.x_up, def: 210, hp: 2000, price: 2800 },
-      { id: "a_x_6", name: "青铜铠甲", tier: TIERS.x_up, def: 230, hp: 2200, price: 3100 },
-      { id: "a_x_7", name: "白银战袍", tier: TIERS.x_up, def: 250, hp: 2400, price: 3400 },
-      { id: "a_x_8", name: "黄金护甲", tier: TIERS.x_up, def: 270, hp: 2600, price: 3700 },
-
       { id: "a_h_1", name: "粗布道袍", tier: TIERS.h_up, def: 45, hp: 350, price: 250 },
-      { id: "a_h_2", name: "兽皮护身甲", tier: TIERS.h_up, def: 55, hp: 450, price: 350 },
-      { id: "a_h_3", name: "麻布道袍", tier: TIERS.h_up, def: 65, hp: 550, price: 450 },
-      { id: "a_h_4", name: "皮革护甲", tier: TIERS.h_up, def: 75, hp: 650, price: 550 },
-      { id: "a_h_5", name: "丝绸道袍", tier: TIERS.h_up, def: 85, hp: 750, price: 650 },
-      { id: "a_h_6", name: "精铁护甲", tier: TIERS.h_up, def: 95, hp: 850, price: 750 },
-      { id: "a_h_7", name: "锦缎道袍", tier: TIERS.h_up, def: 105, hp: 950, price: 850 },
-      { id: "a_h_8", name: "精钢护甲", tier: TIERS.h_up, def: 115, hp: 1050, price: 950 }
+      { id: "a_h_2", name: "兽皮护身甲", tier: TIERS.h_up, def: 55, hp: 450, price: 350 }
     ];
 
     const ACCESSORIES_DATABASE = [
-      { id: "acc_t_1", name: "观天镜", tier: TIERS.t_up, atk: 180, def: 180, hp: 2500, price: 12000 },
-      { id: "acc_t_2", name: "万象图", tier: TIERS.t_up, atk: 210, def: 150, hp: 2200, price: 12500 },
-      { id: "acc_t_3", name: "乾坤袋", tier: TIERS.t_up, atk: 200, def: 160, hp: 2300, price: 13000 },
-      { id: "acc_t_4", name: "混元珠", tier: TIERS.t_up, atk: 220, def: 140, hp: 2100, price: 13500 },
-      { id: "acc_t_5", name: "镇魂铃", tier: TIERS.t_up, atk: 240, def: 130, hp: 2000, price: 14000 },
-      { id: "acc_t_6", name: "造化坠", tier: TIERS.t_up, atk: 260, def: 120, hp: 1900, price: 14500 },
-      { id: "acc_t_7", name: "三生佩", tier: TIERS.t_up, atk: 280, def: 110, hp: 1800, price: 15000 },
-      { id: "acc_t_8", name: "八卦镜", tier: TIERS.t_up, atk: 300, def: 100, hp: 1700, price: 15500 },
-
+      { id: "acc_t_1", name: "太极两仪护符", tier: TIERS.t_up, atk: 180, def: 180, hp: 2500, price: 12000 },
+      { id: "acc_t_2", name: "混沌噬魂血玉", tier: TIERS.t_up, atk: 210, def: 150, hp: 2200, price: 12500 },
       { id: "acc_d_1", name: "聚灵通天珠", tier: TIERS.d_up, atk: 90, def: 90, hp: 1200, price: 4800 },
       { id: "acc_d_2", name: "九幽冥王戒", tier: TIERS.d_up, atk: 110, def: 80, hp: 1100, price: 4900 },
-      { id: "acc_d_3", name: "月明风清佩", tier: TIERS.d_up, atk: 100, def: 70, hp: 1000, price: 5000 },
-      { id: "acc_d_4", name: "凝魂定魄珠", tier: TIERS.d_up, atk: 120, def: 60, hp: 900, price: 5100 },
-      { id: "acc_d_5", name: "龟息定气珠", tier: TIERS.d_up, atk: 130, def: 50, hp: 800, price: 5200 },
-      { id: "acc_d_6", name: "五行相生环", tier: TIERS.d_up, atk: 140, def: 40, hp: 700, price: 5300 },
-      { id: "acc_d_7", name: "纯阳紫气珠", tier: TIERS.d_up, atk: 150, def: 30, hp: 600, price: 5400 },
-      { id: "acc_d_8", name: "七星龙渊戒", tier: TIERS.d_up, atk: 160, def: 20, hp: 500, price: 5500 },
-
-      { id: "acc_x_1", name: "赤霄灵佩", tier: TIERS.x_up, atk: 45, def: 45, hp: 500, price: 1200 },
-      { id: "acc_x_2", name: "幽都玉佩", tier: TIERS.x_up, atk: 50, def: 40, hp: 450, price: 1300 },
-      { id: "acc_x_3", name: "月蚀灵环", tier: TIERS.x_up, atk: 55, def: 35, hp: 400, price: 1400 },
-      { id: "acc_x_4", name: "凝神灵珠", tier: TIERS.x_up, atk: 60, def: 30, hp: 350, price: 1500 },
-      { id: "acc_x_5", name: "紫晶灵珠", tier: TIERS.x_up, atk: 65, def: 25, hp: 300, price: 1600 },
-      { id: "acc_x_6", name: "沧溟灵链", tier: TIERS.x_up, atk: 70, def: 20, hp: 250, price: 1700 },
-      { id: "acc_x_7", name: "凝神灵饰", tier: TIERS.x_up, atk: 75, def: 15, hp: 200, price: 1800 },
-      { id: "acc_x_8", name: "避邪灵环", tier: TIERS.x_up, atk: 80, def: 10, hp: 150, price: 1900 },
-
-      { id: "acc_h_1", name: "七星簪", tier: TIERS.h_up, atk: 15, def: 15, hp: 150, price: 200 },
-      { id: "acc_h_2", name: "护身佛牌", tier: TIERS.h_up, atk: 20, def: 10, hp: 120, price: 250 },
-      { id: "acc_h_3", name: "夜明珠串", tier: TIERS.h_up, atk: 25, def: 5, hp: 100, price: 300 },
-      { id: "acc_h_4", name: "龙凤佩", tier: TIERS.h_up, atk: 30, def: 0, hp: 80, price: 350 },
-      { id: "acc_h_5", name: "玄铁镯", tier: TIERS.h_up, atk: 35, def: -5, hp: 60, price: 400 },
-      { id: "acc_h_6", name: "流云钗", tier: TIERS.h_up, atk: 40, def: -10, hp: 40, price: 450 },
-      { id: "acc_h_7", name: "素银戒", tier: TIERS.h_up, atk: 45, def: -15, hp: 20, price: 500 },
-      { id: "acc_h_8", name: "沉香坠", tier: TIERS.h_up, atk: 50, def: -20, hp: 10, price: 550 }
+      { id: "acc_x_1", name: "青玉灵佩", tier: TIERS.x_up, atk: 45, def: 45, hp: 500, price: 1200 },
+      { id: "acc_h_1", name: "平安小铜戒", tier: TIERS.h_up, atk: 15, def: 15, hp: 150, price: 200 }
     ];
 
     const UNIQUE_MANUALS_DATABASE = [
-      { name: "长生诀", tier: TIERS.t_up, atk: 150, def: 80, hp: 1200 },
-      { name: "混元一气功", tier: TIERS.t_up, atk: 180, def: 60, hp: 1000 },
-      { name: "玉清修真法", tier: TIERS.t_up, atk: 160, def: 70, hp: 1100 },
-      { name: "五行归元功", tier: TIERS.d_up, atk: 120, def: 60, hp: 800 },
-      { name: "大日如来心法", tier: TIERS.d_up, atk: 110, def: 55, hp: 750 },
-      { name: "八九玄功", tier: TIERS.d_up, atk: 100, def: 50, hp: 700 },
-      { name: "太乙神雷剑诀", tier: TIERS.d_up, atk: 130, def: 65, hp: 850 },
-      { name: "不死不灭功", tier: TIERS.d_up, atk: 140, def: 70, hp: 900 },
+      { name: "太上无极混元宝典", tier: TIERS.t_up, atk: 150, def: 80, hp: 1200 },
+      { name: "修罗血海吞天魔功", tier: TIERS.t_up, atk: 180, def: 60, hp: 1000 },
+      { name: "紫气东来大道真经", tier: TIERS.d_up, atk: 90, def: 45, hp: 600 },
       { name: "纯阳无极功", tier: TIERS.x_up, atk: 45, def: 22, hp: 300 },
-      { name: "归真养元功", tier: TIERS.x_up, atk: 45, def: 22, hp: 300 },
-      { name: "离火炼身诀", tier: TIERS.x_up, atk: 45, def: 22, hp: 300 },
-      { name: "青木长生诀", tier: TIERS.x_up, atk: 45, def: 22, hp: 300 },
-      { name: "基础凝神法", tier: TIERS.x_up, atk: 45, def: 22, hp: 300 },
-      { name: "四象固本诀", tier: TIERS.x_up, atk: 45, def: 22, hp: 300 },
-      { name: "混元筑基法", tier: TIERS.x_up, atk: 45, def: 22, hp: 300 },
-      { name: "养气洗髓法", tier: TIERS.x_up, atk: 45, def: 22, hp: 300 },
-      { name: "基础吐纳法", tier: TIERS.h_up, atk: 20, def: 10, hp: 150 },
-      { name: "聚气入门篇", tier: TIERS.h_up, atk: 20, def: 10, hp: 150 },
-      { name: "抱元固本功", tier: TIERS.h_up, atk: 20, def: 10, hp: 150 },
-      { name: "调息定心法", tier: TIERS.h_up, atk: 20, def: 10, hp: 150 },
-      { name: "清气纳灵法", tier: TIERS.h_up, atk: 20, def: 10, hp: 150 },
-      { name: "凝神养气术", tier: TIERS.h_up, atk: 20, def: 10, hp: 150 },
-      { name: "青木生长诀", tier: TIERS.h_up, atk: 20, def: 10, hp: 150 },      
-      { name: "基础锻体诀", tier: TIERS.h_up, atk: 15, def: 8, hp: 120 }
+      { name: "基础吐纳诀", tier: TIERS.h_up, atk: 20, def: 10, hp: 150 }
     ];
 
     const UNIQUE_SKILLS_DATABASE = [
-      { name: "他化自在法", tier: TIERS.t_up, power: 420 },
-      { name: "无龙心法", tier: TIERS.t_up, power: 410 },
-      { name: "神象镇狱劲", tier: TIERS.t_up, power: 400 },
-      { name: "星辰变", tier: TIERS.t_up, power: 490 },
-      { name: "吞天魔功", tier: TIERS.t_up, power: 480 },
+      { name: "他化自在法", tier: TIERS.t_up, power: 320 },
+      { name: "无龙心法", tier: TIERS.t_up, power: 310 },
+      { name: "神象镇狱劲", tier: TIERS.t_up, power: 300 },
+      { name: "星辰变", tier: TIERS.t_up, power: 290 },
+      { name: "吞天魔功（", tier: TIERS.t_up, power: 280 },
       { name: "不死不灭功", tier: TIERS.d_up, power: 300 },
-      { name: "太乙神雷剑诀", tier: TIERS.d_up, power: 380 },
-      { name: "混沌噬魂诀", tier: TIERS.d_up, power: 370 },
-      { name: "大荒囚天指", tier: TIERS.d_up, power: 360 },
-      { name: "八九玄功", tier: TIERS.d_up, power: 350 },
-      { name: "烈火焚天掌", tier: TIERS.x_up, power: 295 },
-      { name: "白骨观想法", tier: TIERS.x_up, power: 290 },
-      { name: "五曜流光步", tier: TIERS.x_up, power: 285 },
-      { name: "幽冥鬼爪", tier: TIERS.x_up, power: 280 },
-      { name: "乾坤清气诀", tier: TIERS.x_up, power: 295 },
-      { name: "八荒帝拳", tier: TIERS.x_up, power: 290 },
-      { name: "纯阳剑诀", tier: TIERS.x_up, power: 285 },
-      { name: "天罡三十六变", tier: TIERS.x_up, power: 280 },
-      { name: "炼狱勾魂锁", tier: TIERS.x_up, power: 285 },
-      { name: "佛门大般若掌", tier: TIERS.x_up, power: 280 },
-      { name: "基础吐纳术", tier: TIERS.h_up, power: 250 },
-      { name: "基础御剑术", tier: TIERS.h_up, power: 145 }, 
-      { name: "狂风刀法", tier: TIERS.h_up, power: 150 },
-      { name: "凌波微步", tier: TIERS.h_up, power: 145 },
-      { name: "搜魂大法", tier: TIERS.h_up, power: 135 },
-      { name: "御风术", tier: TIERS.h_up, power: 130 },
-      { name: "罗汉拳", tier: TIERS.h_up, power: 125 },
-      { name: "乾坤指", tier: TIERS.h_up, power: 135 },
-      { name: "青元剑诀", tier: TIERS.h_up, power: 130 }
+      { name: "太乙神雷剑诀", tier: TIERS.d_up, power: 180 },
+      { name: "混沌噬魂诀", tier: TIERS.d_up, power: 170 },
+      { name: "大荒囚天指", tier: TIERS.d_up, power: 160 },
+      { name: "八九玄功", tier: TIERS.d_up, power: 150 },
+      { name: "烈火焚天掌", tier: TIERS.x_up, power: 95 },
+      { name: "白骨观想法", tier: TIERS.x_up, power: 90 },
+      { name: "五曜流光步", tier: TIERS.x_up, power: 85 },
+      { name: "幽冥鬼爪 ", tier: TIERS.x_up, power: 80 },
+      { name: "乾坤清气诀", tier: TIERS.x_up, power: 95 },
+      { name: "八荒帝拳", tier: TIERS.x_up, power: 90 },
+      { name: "纯阳剑诀", tier: TIERS.x_up, power: 85 },
+      { name: "天罡三十六变", tier: TIERS.x_up, power: 80 },
+      { name: "炼狱勾魂锁", tier: TIERS.x_up, power: 85 },
+      { name: "佛门大般若掌", tier: TIERS.x_up, power: 80 },
+      { name: "基础吐纳术", tier: TIERS.h_up, power: 50 },
+      { name: "基础御剑术", tier: TIERS.h_up, power: 45 }, 
+      { name: "狂风刀法", tier: TIERS.h_up, power: 50 },
+      { name: "凌波微步", tier: TIERS.h_up, power: 45 },
+      { name: "搜魂大法", tier: TIERS.h_up, power: 35 },
+      { name: "御风术", tier: TIERS.h_up, power: 30 },
+      { name: "罗汉拳", tier: TIERS.h_up, power: 25 },
+      { name: "乾坤一指", tier: TIERS.h_up, power: 35 },
+      { name: "青元剑诀", tier: TIERS.h_up, power: 30 },
+      { name: "纯阳剑诀", tier: TIERS.h_up, power: 25 }
+      
+
     ];
 
     const BEASTS_DATABASE = [
@@ -393,6 +292,7 @@
       { id: "b_x_4", name: "三足金乌", tier: TIERS.x_up, atk: 150, def: 80, hp: 1200, price: 1800 },
       { id: "b_h_1", name: "白泽", tier: TIERS.h_up, atk: 50, def: 30, hp: 400, price: 300 },
       { id: "b_h_2", name: "貔貅", tier: TIERS.h_up, atk: 50, def: 30, hp: 400, price: 300 },
+      { id: "b_h_2", name: "貔貅", tier: TIERS.h_up, atk: 50, def: 30, hp: 400, price: 300 },
       { id: "b_h_3", name: "灵龟", tier: TIERS.h_up, atk: 50, def: 30, hp: 400, price: 300 },
       { id: "b_h_4", name: "灵鹿", tier: TIERS.h_up, atk: 50, def: 30, hp: 400, price: 300 },
       { id: "b_h_5", name: "灵狐", tier: TIERS.h_up, atk: 50, def: 30, hp: 400, price: 300 },
@@ -404,28 +304,11 @@
     ];
 
     const PILLS_DATABASE = {
-      p_t1: { id: "p_t1", name: "生生造化丹", tier: TIERS.t_up, desc: "四维全+20", comp: 20, luck: 20, phys: 20, charm: 20, price: 9000 },
-      p_t2: { id: "p_t2", name: "天道轮回丹", tier: TIERS.t_up, desc: "寿元+200年", age: 200, price: 6000 },
-      p_t3: { id: "p_t3", name: "混元补天丹", tier: TIERS.d_up, desc: "寿元+10年，气血+5000", hpMax: 5000, age: 10, price: 7000 },
-      p_t4: { id: "p_t4", name: "九转还魂丹", tier: TIERS.t_up, desc: "寿元+50年，气血+1500", hpMax: 5000, age: 50, price: 8000 },
-      p_d1: { id: "p_d1", name: "天香续命丸", tier: TIERS.d_up, desc: "气血上限+1500", hpMax: 1500, price: 2800 },
-      p_d2: { id: "p_d2", name: "阴阳生死丹", tier: TIERS.d_up, desc: "寿元+50年", age: 50, price: 4000 },
-      p_d3: { id: "p_d3", name: "龙涎清心丹", tier: TIERS.d_up, desc: "寿元+10年，气血+500", hpMax: 500, age: 10, price: 3500 },
-      p_d4: { id: "p_d4", name: "五行淬体丹", tier: TIERS.d_up, desc: "四维全+10", comp: 10, luck: 10, phys: 10, charm: 10, price: 3500 },
-      p_x1: { id: "p_x1", name: "涤尘丹", tier: TIERS.x_up, desc: "四维全+5", comp: 5, luck: 5, phys: 5, charm: 5, price: 850 },
-      p_x2: { id: "p_x2", name: "驻颜丹", tier: TIERS.x_up, desc: "颜值+10", charm: 10, price: 900 },
-      p_x3: { id: "p_x3", name: "破障丹", tier: TIERS.x_up, desc: "悟性+10", comp:20, price: 900 },
-      p_x4: { id: "p_x4", name: "敛息无相丹", tier: TIERS.x_up, desc: "幸运+10", luck: 10, price: 900 },
-      p_x5: { id: "p_x5", name: "金刚不坏丹", tier: TIERS.x_up, desc: "体质+10", phys: 10, price: 900 },
-      p_x6: { id: "p_x6", name: "轮回转生丹", tier: TIERS.x_up, desc: "寿元+10年", age: 10, price: 900 },
-      p_h1: { id: "p_h1", name: "聚气散", tier: TIERS.h_up, desc: "修为+200", exp: 200, price: 150 },
-      p_h2: { id: "p_h2", name: "凝元丹", tier: TIERS.h_up, desc: "修为+500", exp: 500, price: 500 },
-      p_h3: { id: "p_h3", name: "回春散", tier: TIERS.h_up, desc: "气血上限+100", hpMax: 100, price: 200 },
-      p_h4: { id: "p_h4", name: "安神丸", tier: TIERS.h_up, desc: "悟性+5", comp: 5, price: 250 },
-      p_h5: { id: "p_h5", name: "淬体丸", tier: TIERS.h_up, desc: "体质+5", phys: 5, price: 600 },
-      p_h6: { id: "p_h6", name: "补气散", tier: TIERS.h_up, desc: "修为+150", exp: 150, price: 50 },
-      p_h7: { id: "p_h7", name: "活血丹", tier: TIERS.h_up, desc: "气血上限+150", hpMax: 150, price: 800 },
-      p_h8: { id: "p_h8", name: "辟谷丹", tier: TIERS.h_up, desc: "气血上限+50,修为+50", hpMax: 50, exp: 50, price: 550 },
+      p_t1: { id: "p_t1", name: "太上九转还魂金丹", tier: TIERS.t_up, desc: "寿元+150年，气血+3000", hpMax: 3000, age: 150, price: 8000 },
+      p_t2: { id: "p_t2", name: "混沌造化易髓丹", tier: TIERS.t_up, desc: "四维全+10", comp: 10, luck: 10, phys: 10, charm: 10, price: 9000 },
+      p_d1: { id: "p_d1", name: "九转大还丹", tier: TIERS.d_up, desc: "气血上限+1500", hpMax: 1500, price: 2800 },
+      p_x1: { id: "p_x1", name: "万木逢春润腑丹", tier: TIERS.x_up, desc: "气血上限+600", hpMax: 600, price: 850 },
+      p_h1: { id: "p_h1", name: "黄芽聚气灵丹", tier: TIERS.h_up, desc: "修为+200", exp: 200, price: 150 }
     };
 
     let gameState = {
@@ -451,7 +334,7 @@
         hp: 100,
         mp: 100,
         spiritStones: 2880,
-        sectId: "s_tianjian",
+        sectId: "s_qingyun",
         baseDiscipleRank: "外门弟子",
         sectRank: "外门弟子",
         root: null,
@@ -488,12 +371,8 @@
     let holdTimer = null;
     let holdInterval = null;
 
-    const NAMES = ["叶清玄", "顾长歌", "林寻仙", "苏子墨", "姜太虚", "楚风", "韩立", "白小纯", "孟浩", "王林","顾长生", "陆清渊", "楚风眠", "叶无道", "墨渊", "凌霄", "纪云昭", "晏紫苏", "韩立尘", "沈沧海",
-      "莫问天", "萧尘", "夜无烬", "苏星河", "裴九霄", "傅长风", "谢云流", "顾寒舟", "江临渊", "百里玄",
-      "东方墨", "司徒空", "皇甫极", "姬无夜", "宗政鸿", "洛清雪", "苏凝霜", "叶灵儿", "慕容琴心", "凌清秋",
-      "沈若虚", "萧玉儿", "云梦瑶", "姬如雪", "夜汐", "白羽裳", "夏倾城", "颜如玉", "秦昭雪", "柳如烟",
-      "唐诗画", "花千骨", "陆瑶光", "上官婉", "南宫问心", "宁无双", "纪若尘", "叶冰裳", "夏侯仪", "梵音" ];
-      
+    const NAMES = ["叶清玄", "顾长歌", "林寻仙", "苏子墨", "姜太虚", "楚风", "韩立", "白小纯", "孟浩", "王林","楚惊鸿","林动","萧炎","方羽","叶凡","林雷","李天命","张小凡","陈长生","周子翼","谢孤白","林寻安",
+      "江寒生","周天一","宁千秋"];
     function randomPlayerName() {
       gameState.player.name = NAMES[Math.floor(Math.random() * NAMES.length)];
       if(document.getElementById("inputPlayerName")) document.getElementById("inputPlayerName").value = gameState.player.name;
@@ -542,12 +421,10 @@
       gameState.candidateRoots = [rollSpiritualRootsSet(), rollSpiritualRootsSet(), rollSpiritualRootsSet()];
       renderStage();
     }
-    
     function rerollRoots() {
       gameState.candidateRoots = [rollSpiritualRootsSet(), rollSpiritualRootsSet(), rollSpiritualRootsSet()];
       renderStage();
     }
-    
     function confirmRootChoice() {
       const nameInput = document.getElementById("inputPlayerName");
       if (nameInput && nameInput.value.trim()) gameState.player.name = nameInput.value.trim();
@@ -560,13 +437,11 @@
       gameState.selectedFateIds = [];
       rerollFates();
     }
-    
     function rerollFates() {
       gameState.selectedFateIds = [];
       gameState.candidateFates = [...FATE_TRAITS_DATABASE].sort(() => 0.5 - Math.random()).slice(0, 12);
       renderStage();
     }
-    
     function toggleFateSelect(id) {
       const idx = gameState.selectedFateIds.indexOf(id);
       if (idx >= 0) {
@@ -577,7 +452,6 @@
       }
       renderStage();
     }
-    
     function confirmFateChoice() {
       if (gameState.selectedFateIds.length !== 3) { showModal("命格未定", "请选定3项先天命格。"); return; }
       gameState.player.traits = gameState.candidateFates.filter(f => gameState.selectedFateIds.includes(f.id));
@@ -659,26 +533,22 @@
       const p = gameState.player;
       const baseRealm = REALMS[p.realmIdx] || REALMS[0];
       let comp = p.baseComp, luck = p.baseLuck, phys = p.basePhys, charm = p.baseCharm;
-      if (p.traits) {
-        p.traits.forEach(t => { comp += (t.comp||0); luck += (t.luck||0); phys += (t.phys||0); charm += (t.charm||0); });
-      }
+      p.traits.forEach(t => { comp += (t.comp||0); luck += (t.luck||0); phys += (t.phys||0); charm += (t.charm||0); });
       
       let bHp = 0, bMp = 0, bAtk = 0, bDef = 0;
       
-      if (p.acquiredManuals) {
-        Object.keys(p.acquiredManuals).forEach(mKey => {
-          const entry = p.acquiredManuals[mKey];
-          const rankMult = MASTERY_RANKS[entry.rankIdx].mult;
-          bAtk += Math.floor((entry.manualObj.atk || 0) * rankMult);
-          bDef += Math.floor((entry.manualObj.def || 0) * rankMult);
-          bHp  += Math.floor((entry.manualObj.hp || 0) * rankMult);
-        });
-      }
+      Object.keys(p.acquiredManuals).forEach(mKey => {
+        const entry = p.acquiredManuals[mKey];
+        const rankMult = MASTERY_RANKS[entry.rankIdx].mult;
+        bAtk += Math.floor((entry.manualObj.atk || 0) * rankMult);
+        bDef += Math.floor((entry.manualObj.def || 0) * rankMult);
+        bHp  += Math.floor((entry.manualObj.hp || 0) * rankMult);
+      });
 
-      if (p.equipWeapons) p.equipWeapons.forEach(w => { bAtk += w.atk||0; bDef += w.def||0; });
-      if (p.equipArmors) p.equipArmors.forEach(a => { bDef += a.def||0; bHp += a.hp||0; });
-      if (p.equipAccessories) p.equipAccessories.forEach(a => { bAtk += a.atk||0; bDef += a.def||0; bHp += a.hp||0; });
-      if (p.equipBeasts) p.equipBeasts.forEach(b => { bAtk += b.atk||0; bDef += b.def||0; bHp += b.hp||0; });
+      p.equipWeapons.forEach(w => { bAtk += w.atk||0; bDef += w.def||0; });
+      p.equipArmors.forEach(a => { bDef += a.def||0; bHp += a.hp||0; });
+      p.equipAccessories.forEach(a => { bAtk += a.atk||0; bDef += a.def||0; bHp += a.hp||0; });
+      p.equipBeasts.forEach(b => { bAtk += b.atk||0; bDef += b.def||0; bHp += b.hp||0; });
 
       return {
         comp, luck, phys, charm,
@@ -701,9 +571,7 @@
       if (rName.includes("飞升")) base = 5000;
 
       let fateBonus = 0;
-      if (p.traits) {
-        p.traits.forEach(t => { fateBonus += (t.bonusAge || 0); });
-      }
+      p.traits.forEach(t => { fateBonus += (t.bonusAge || 0); });
       return base + (p.extraLifespan || 0) + fateBonus;
     }
 
@@ -741,20 +609,18 @@
       p.spiritStones += stip;
       p.month = (p.month || 0) + months;
       
-      if (p.acquiredManuals) {
-        Object.keys(p.acquiredManuals).forEach(mKey => {
-          const entry = p.acquiredManuals[mKey];
-          if (entry.rankIdx < MASTERY_RANKS.length - 1) {
-            entry.exp += months * 5;
-            const req = MASTERY_RANKS[entry.rankIdx].req;
-            if (entry.exp >= req) {
-              entry.exp = 0;
-              entry.rankIdx++;
-              addLog(`功法《${mKey}》感悟突破至【${MASTERY_RANKS[entry.rankIdx].name}】境界！`, "【功法精进】");
-            }
+      Object.keys(p.acquiredManuals).forEach(mKey => {
+        const entry = p.acquiredManuals[mKey];
+        if (entry.rankIdx < MASTERY_RANKS.length - 1) {
+          entry.exp += months * 5;
+          const req = MASTERY_RANKS[entry.rankIdx].req;
+          if (entry.exp >= req) {
+            entry.exp = 0;
+            entry.rankIdx++;
+            addLog(`功法《${mKey}》感悟突破至【${MASTERY_RANKS[entry.rankIdx].name}】境界！`, "【功法精进】");
           }
-        });
-      }
+        }
+      });
 
       while (p.month >= 12) {
         p.month -= 12;
@@ -776,47 +642,25 @@
       document.getElementById("modalContent").innerHTML = content;
       document.getElementById("gameModal").classList.remove("hidden");
     }
-    
     function closeModal() { document.getElementById("gameModal").classList.add("hidden"); }
-    
     function resetGameModal() {
       showModal("兵解轮回", `是否散尽真元重塑道骨？<div class="mt-3 text-right"><button onclick="resetGame()" class="px-3 py-1 bg-red-800 text-white rounded text-xs">斩断红尘·兵解</button></div>`);
     }
-    
-    function resetGame() { localStorage.removeItem("immortal_journey_v13"); location.reload(); }
-    
+    function resetGame() { localStorage.removeItem("immortal_journey_v12"); location.reload(); }
     function saveGame(prompt=false) {
-      localStorage.setItem("immortal_journey_v13", JSON.stringify(gameState));
+      localStorage.setItem("immortal_journey_v12", JSON.stringify(gameState));
       if(prompt) showModal("道印铭刻", "修仙进度已安全保存。");
     }
-    
     function loadGame() {
-      const raw = localStorage.getItem("immortal_journey_v13");
+      const raw = localStorage.getItem("immortal_journey_v12");
       if (raw) { 
         gameState = JSON.parse(raw);
-        // 全面兼容老旧存档的安全初始化修补
-        if(!gameState.player) gameState.player = {};
         if(!gameState.player.acquiredManuals) gameState.player.acquiredManuals = {};
         if(!gameState.player.acquiredSkills) gameState.player.acquiredSkills = {};
-        if(!gameState.player.inventory) gameState.player.inventory = {};
-        if(!gameState.player.inventory.weapons) gameState.player.inventory.weapons = [];
-        if(!gameState.player.inventory.armors) gameState.player.inventory.armors = [];
-        if(!gameState.player.inventory.accessories) gameState.player.inventory.accessories = [];
-        if(!gameState.player.inventory.beasts) gameState.player.inventory.beasts = [];
         if(!gameState.player.inventory.pills) gameState.player.inventory.pills = {};
         if(!gameState.player.inventory.skillBooks) gameState.player.inventory.skillBooks = [];
         if(!gameState.player.inventory.manualBooks) gameState.player.inventory.manualBooks = [];
         if(!gameState.player.inventory.craftBooks) gameState.player.inventory.craftBooks = [];
-        if(!gameState.player.crafts) {
-          gameState.player.crafts = {
-            alchemy:   { learned: false, level: 1, exp: 0 },
-            forging:   { learned: false, level: 1, exp: 0 },
-            planting:  { learned: false, level: 1, exp: 0 },
-            talisman:  { learned: false, level: 1, exp: 0 },
-            formation: { learned: false, level: 1, exp: 0 },
-            beast:     { learned: false, level: 1, exp: 0 }
-          };
-        }
         if(!gameState.marketStock || gameState.marketStock.length === 0) generateMarketStock();
         return true; 
       }
@@ -825,11 +669,11 @@
 
     function generateMarketStock() {
       const p = gameState.player;
-      const ownedWeaponNames = new Set([...(p.inventory.weapons||[]).map(w=>w.name), ...(p.equipWeapons||[]).map(w=>w.name)]);
-      const ownedArmorNames = new Set([...(p.inventory.armors||[]).map(a=>a.name), ...(p.equipArmors||[]).map(a=>a.name)]);
-      const ownedAccNames = new Set([...(p.inventory.accessories||[]).map(a=>a.name), ...(p.equipAccessories||[]).map(a=>a.name)]);
-      const ownedManualNames = new Set(Object.keys(p.acquiredManuals||{}));
-      const ownedSkillNames = new Set(Object.keys(p.acquiredSkills||{}));
+      const ownedWeaponNames = new Set([...p.inventory.weapons.map(w=>w.name), ...p.equipWeapons.map(w=>w.name)]);
+      const ownedArmorNames = new Set([...p.inventory.armors.map(a=>a.name), ...p.equipArmors.map(a=>a.name)]);
+      const ownedAccNames = new Set([...p.inventory.accessories.map(a=>a.name), ...p.equipAccessories.map(a=>a.name)]);
+      const ownedManualNames = new Set(Object.keys(p.acquiredManuals));
+      const ownedSkillNames = new Set(Object.keys(p.acquiredSkills));
 
       let pool = [];
 
@@ -841,12 +685,12 @@
       BEASTS_DATABASE.forEach(b => { pool.push({ type: 'beast', item: b, price: b.price, tier: b.tier.name }); });
       
       UNIQUE_MANUALS_DATABASE.forEach(m => {
-        if(!ownedManualNames.has(m.name) && !(p.inventory.manualBooks||[]).some(b=>b.name===m.name)) {
+        if(!ownedManualNames.has(m.name) && !p.inventory.manualBooks.some(b=>b.name===m.name)) {
           pool.push({ type: 'manualBook', item: m, price: Math.floor(m.atk * 35), tier: m.tier.name });
         }
       });
       UNIQUE_SKILLS_DATABASE.forEach(s => {
-        if(!ownedSkillNames.has(s.name) && !(p.inventory.skillBooks||[]).some(b=>b.name===s.name)) {
+        if(!ownedSkillNames.has(s.name) && !p.inventory.skillBooks.some(b=>b.name===s.name)) {
           pool.push({ type: 'skillBook', item: s, price: Math.floor(s.power * 25), tier: s.tier.name });
         }
       });
@@ -860,7 +704,7 @@
         { key: 'beast', name: '御兽术传承秘籍' }
       ];
       craftTypes.forEach(ct => {
-        if(!p.crafts[ct.key].learned && !(p.inventory.craftBooks||[]).some(b=>b.craftKey===ct.key)) {
+        if(!p.crafts[ct.key].learned && !p.inventory.craftBooks.some(b=>b.craftKey===ct.key)) {
           pool.push({ type: 'craftBook', item: { name: ct.name, craftKey: ct.key, desc: `习得修仙六艺之${ct.name.replace('传承秘籍','')}` }, price: 1500, tier: '玄阶' });
         }
       });
@@ -1178,26 +1022,26 @@
       renderStage();
     }
 
-    function recycleItem(type, idxOrKey) {
+    function recycleItem(type, idx) {
       const p = gameState.player;
       let item = null;
       let refund = 200;
       if (type === 'weapon') {
-        item = p.inventory.weapons.splice(idxOrKey, 1)[0];
+        item = p.inventory.weapons.splice(idx, 1)[0];
         refund = Math.floor((item.price || 1000) * 0.3);
       } else if (type === 'armor') {
-        item = p.inventory.armors.splice(idxOrKey, 1)[0];
+        item = p.inventory.armors.splice(idx, 1)[0];
         refund = Math.floor((item.price || 1000) * 0.3);
       } else if (type === 'accessory') {
-        item = p.inventory.accessories.splice(idxOrKey, 1)[0];
+        item = p.inventory.accessories.splice(idx, 1)[0];
         refund = Math.floor((item.price || 1000) * 0.3);
       } else if (type === 'pill') {
-        const pKey = idxOrKey;
-        if (p.inventory.pills[pKey] && p.inventory.pills[pKey] > 0) {
+        const pKey = Object.keys(p.inventory.pills)[idx];
+        if (pKey) {
           p.inventory.pills[pKey]--;
           if(p.inventory.pills[pKey] <= 0) delete p.inventory.pills[pKey];
           refund = 50;
-          item = { name: PILLS_DATABASE[pKey] ? PILLS_DATABASE[pKey].name : '未知丹药' };
+          item = { name: PILLS_DATABASE[pKey].name };
         }
       }
       if (item) {
@@ -1275,6 +1119,7 @@
     }
 
     function startHoldAction(actionType, e) {
+      if(e) e.preventDefault();
       if (holdTimer) clearTimeout(holdTimer);
       if (holdInterval) clearInterval(holdInterval);
 
@@ -1290,6 +1135,7 @@
     }
 
     function stopHoldAction(e) {
+      if(e) e.preventDefault();
       if (holdTimer) clearTimeout(holdTimer);
       if (holdInterval) clearInterval(holdInterval);
       holdTimer = null;
@@ -1375,19 +1221,11 @@
             </div>
             <button onclick="initFatesStage()" class="px-3 py-1 text-xs rounded bg-stone-800 text-stone-300">← 返回重选命格</button>
           </div>
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 max-h-[58vh] overflow-y-auto pr-1">
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 max-h-[58vh] overflow-y-auto pr-1">
             ${SECTS.map(s => `
-              <div onclick="chooseSect('${s.id}')" class="ink-card p-3.5 rounded-xl cursor-pointer flex flex-col justify-between space-y-3">
-                <div class="flex items-center space-x-2">
-                  <span class="text-2xl">${s.icon}</span>
-                  <div>
-                    <div class="font-bold text-amber-300 text-sm">${s.name}</div>
-                  </div>
-                </div>
-                <div class="text-[11px] text-stone-300 leading-tight bg-stone-950/50 p-2 rounded">${s.type}</div>
-                <div class="text-right">
-                  <span class="text-xs text-amber-500 font-bold bg-amber-950/50 px-2 py-1 rounded border border-amber-800/40">拜入 ➔</span>
-                </div>
+              <div onclick="chooseSect('${s.id}')" class="ink-card p-3.5 rounded-xl cursor-pointer flex justify-between items-center">
+                <div class="flex items-center space-x-3"><span class="text-2xl">${s.icon}</span><div><div class="font-bold text-amber-300 text-sm">${s.name}</div><div class="text-[10px] text-stone-400">${s.type}</div></div></div>
+                <span class="text-xs text-amber-500 font-bold bg-amber-950/50 px-2 py-1 rounded border border-amber-800/40">拜入 ➔</span>
               </div>
             `).join('')}
           </div>
@@ -1480,7 +1318,7 @@
                 <span class="text-[10px] text-stone-500 font-normal">仙历第 ${p.age} 载 第 ${p.month+1} 月</span>
               </div>
               <div class="h-44 overflow-y-auto text-[11px] space-y-1.5 pr-1">
-                ${(gameState.logs||[]).slice().reverse().map(l=>`<div class="border-b border-stone-900/40 pb-1"><span class="text-amber-500 font-bold">${l.tag}</span> <span class="text-stone-400">[${l.time}]</span> <span class="text-stone-300">${l.text}</span></div>`).join('')}
+                ${gameState.logs.slice().reverse().map(l=>`<div class="border-b border-stone-900/40 pb-1"><span class="text-amber-500 font-bold">${l.tag}</span> <span class="text-stone-400">[${l.time}]</span> <span class="text-stone-300">${l.text}</span></div>`).join('')}
               </div>
             </div>
           </div>`;
@@ -1501,7 +1339,7 @@
               <div class="ink-panel p-4 rounded-xl border border-stone-800 space-y-2">
                 <h4 class="text-xs font-bold text-amber-300 border-b border-stone-800 pb-1">📜 先天命格纳福</h4>
                 <div class="text-xs space-y-1 pt-1">
-                  ${(p.traits||[]).map(t=>`<div class="flex justify-between items-center bg-stone-900 px-2.5 py-1.5 rounded border border-stone-800"><span class="${t.colorClass} font-bold">${t.name}</span><span class="text-[10px] text-stone-400">${t.desc}</span></div>`).join('')}
+                  ${p.traits.map(t=>`<div class="flex justify-between items-center bg-stone-900 px-2.5 py-1.5 rounded border border-stone-800"><span class="${t.colorClass} font-bold">${t.name}</span><span class="text-[10px] text-stone-400">${t.desc}</span></div>`).join('')}
                 </div>
               </div>
             </div>
@@ -1509,7 +1347,7 @@
               <h4 class="text-xs font-bold text-amber-300 border-b border-stone-800 pb-1">☯️ 十绝灵根详细道骨 (上限100)</h4>
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
                 ${elmsKeys.map(k => {
-                  const cfg = ELEMENT_CONFIG[k], v = p.root && p.root.values ? p.root.values[k] : 0;
+                  const cfg = ELEMENT_CONFIG[k], v = p.root ? p.root.values[k] : 0;
                   return `<div class="flex items-center text-xs bg-stone-900/60 p-2 rounded border border-stone-800/60"><span class="w-6 font-bold" style="color:${cfg.color}">${cfg.name}</span><div class="flex-1 bg-stone-950 h-2.5 mx-2 rounded overflow-hidden"><div class="${cfg.bar} h-full" style="width:${v}%"></div></div><span class="w-7 text-right ${v>=80?'text-amber-300 font-bold':'text-stone-400'}">${v}</span></div>`;
                 }).join('')}
               </div>
@@ -1600,20 +1438,20 @@
               <h4 class="text-xs font-bold text-amber-300 border-b border-stone-800 pb-1">⚔️ 当前随身装备配置与具体加成</h4>
               <div class="grid grid-cols-1 sm:grid-cols-4 gap-2 text-xs">
                 <div class="bg-stone-900 p-2.5 rounded border border-stone-800">
-                  <div class="text-[10px] text-stone-400 mb-1">本命神兵 (${(p.equipWeapons||[]).length}/2)</div>
-                  ${(p.equipWeapons||[]).map((w,i)=>`<div class="${w.tier.colorClass} font-bold truncate">${w.name} (攻+${w.atk} 防+${w.def}) <button onclick="unequipItem('weapon',${i})" class="text-red-400 text-[10px] ml-1">[卸下]</button></div>`).join('') || '<span class="text-stone-600">未装备</span>'}
+                  <div class="text-[10px] text-stone-400 mb-1">本命神兵 (${p.equipWeapons.length}/2)</div>
+                  ${p.equipWeapons.map((w,i)=>`<div class="${w.tier.colorClass} font-bold truncate">${w.name} (攻+${w.atk} 防+${w.def}) <button onclick="unequipItem('weapon',${i})" class="text-red-400 text-[10px] ml-1">[卸下]</button></div>`).join('') || '<span class="text-stone-600">未装备</span>'}
                 </div>
                 <div class="bg-stone-900 p-2.5 rounded border border-stone-800">
-                  <div class="text-[10px] text-stone-400 mb-1">护体道甲 (${(p.equipArmors||[]).length}/2)</div>
-                  ${(p.equipArmors||[]).map((a,i)=>`<div class="${a.tier.colorClass} font-bold truncate">${a.name} (防+${a.def} 血+${a.hp}) <button onclick="unequipItem('armor',${i})" class="text-red-400 text-[10px] ml-1">[卸下]</button></div>`).join('') || '<span class="text-stone-600">未装备</span>'}
+                  <div class="text-[10px] text-stone-400 mb-1">护体道甲 (${p.equipArmors.length}/2)</div>
+                  ${p.equipArmors.map((a,i)=>`<div class="${a.tier.colorClass} font-bold truncate">${a.name} (防+${a.def} 血+${a.hp}) <button onclick="unequipItem('armor',${i})" class="text-red-400 text-[10px] ml-1">[卸下]</button></div>`).join('') || '<span class="text-stone-600">未装备</span>'}
                 </div>
                 <div class="bg-stone-900 p-2.5 rounded border border-stone-800">
-                  <div class="text-[10px] text-stone-400 mb-1">通灵佩饰 (${(p.equipAccessories||[]).length}/10)</div>
-                  ${(p.equipAccessories||[]).map((ac,i)=>`<div class="${ac.tier.colorClass} font-bold truncate">${ac.name} (攻+${ac.atk||0} 防+${ac.def||0}) <button onclick="unequipItem('accessory',${i})" class="text-red-400 text-[10px] ml-1">[卸下]</button></div>`).join('') || '<span class="text-stone-600">未装备</span>'}
+                  <div class="text-[10px] text-stone-400 mb-1">通灵佩饰 (${p.equipAccessories.length}/10)</div>
+                  ${p.equipAccessories.map((ac,i)=>`<div class="${ac.tier.colorClass} font-bold truncate">${ac.name} (攻+${ac.atk||0} 防+${ac.def||0}) <button onclick="unequipItem('accessory',${i})" class="text-red-400 text-[10px] ml-1">[卸下]</button></div>`).join('') || '<span class="text-stone-600">未装备</span>'}
                 </div>
                 <div class="bg-stone-900 p-2.5 rounded border border-stone-800">
-                  <div class="text-[10px] text-stone-400 mb-1">随行神兽 (${(p.equipBeasts||[]).length}/2)</div>
-                  ${(p.equipBeasts||[]).map((b,i)=>`<div class="${b.tier.colorClass} font-bold truncate">${b.name} (攻+${b.atk} 防+${b.def}) <button onclick="unequipItem('beast',${i})" class="text-red-400 text-[10px] ml-1">[收回]</button></div>`).join('') || '<span class="text-stone-600">未携带</span>'}
+                  <div class="text-[10px] text-stone-400 mb-1">随行神兽 (${p.equipBeasts.length}/2)</div>
+                  ${p.equipBeasts.map((b,i)=>`<div class="${b.tier.colorClass} font-bold truncate">${b.name} (攻+${b.atk} 防+${b.def}) <button onclick="unequipItem('beast',${i})" class="text-red-400 text-[10px] ml-1">[收回]</button></div>`).join('') || '<span class="text-stone-600">未携带</span>'}
                 </div>
               </div>
             </div>
@@ -1624,29 +1462,28 @@
                 <div class="bg-stone-900 p-3 rounded border border-stone-800 space-y-2">
                   <div class="font-bold text-amber-200">神兵武器库</div>
                   <div class="space-y-1.5 max-h-40 overflow-y-auto">
-                    ${(p.inventory.weapons||[]).map((w,i)=>`<div class="flex justify-between items-center bg-stone-950 p-1.5 rounded"><div><span class="${w.tier.colorClass}">${w.name}</span> <span class="text-[9px] text-stone-400">(攻+${w.atk})</span></div><div class="space-x-1"><button onclick="equipItem('weapon',${i})" class="px-2 py-0.5 bg-stone-800 hover:bg-stone-700 rounded text-[10px]">装备</button><button onclick="recycleItem('weapon',${i})" class="px-2 py-0.5 bg-red-900 hover:bg-red-800 rounded text-[10px] text-white">回收</button></div></div>`).join('') || '<span class="text-[10px] text-stone-500">无备用武器</span>'}
+                    ${p.inventory.weapons.map((w,i)=>`<div class="flex justify-between items-center bg-stone-950 p-1.5 rounded"><div><span class="${w.tier.colorClass}">${w.name}</span> <span class="text-[9px] text-stone-400">(攻+${w.atk})</span></div><div class="space-x-1"><button onclick="equipItem('weapon',${i})" class="px-2 py-0.5 bg-stone-800 hover:bg-stone-700 rounded text-[10px]">装备</button><button onclick="recycleItem('weapon',${i})" class="px-2 py-0.5 bg-red-900 hover:bg-red-800 rounded text-[10px] text-white">回收</button></div></div>`).join('') || '<span class="text-[10px] text-stone-500">无备用武器</span>'}
                   </div>
                 </div>
                 <div class="bg-stone-900 p-3 rounded border border-stone-800 space-y-2">
                   <div class="font-bold text-emerald-300">护体道甲库</div>
                   <div class="space-y-1.5 max-h-40 overflow-y-auto">
-                    ${(p.inventory.armors||[]).map((a,i)=>`<div class="flex justify-between items-center bg-stone-950 p-1.5 rounded"><div><span class="${a.tier.colorClass}">${a.name}</span> <span class="text-[9px] text-stone-400">(防+${a.def})</span></div><div class="space-x-1"><button onclick="equipItem('armor',${i})" class="px-2 py-0.5 bg-stone-800 hover:bg-stone-700 rounded text-[10px]">装备</button><button onclick="recycleItem('armor',${i})" class="px-2 py-0.5 bg-red-900 hover:bg-red-800 rounded text-[10px] text-white">回收</button></div></div>`).join('') || '<span class="text-[10px] text-stone-500">无备用道甲</span>'}
+                    ${p.inventory.armors.map((a,i)=>`<div class="flex justify-between items-center bg-stone-950 p-1.5 rounded"><div><span class="${a.tier.colorClass}">${a.name}</span> <span class="text-[9px] text-stone-400">(防+${a.def})</span></div><div class="space-x-1"><button onclick="equipItem('armor',${i})" class="px-2 py-0.5 bg-stone-800 hover:bg-stone-700 rounded text-[10px]">装备</button><button onclick="recycleItem('armor',${i})" class="px-2 py-0.5 bg-red-900 hover:bg-red-800 rounded text-[10px] text-white">回收</button></div></div>`).join('') || '<span class="text-[10px] text-stone-500">无备用道甲</span>'}
                   </div>
                 </div>
                 <div class="bg-stone-900 p-3 rounded border border-stone-800 space-y-2">
                   <div class="font-bold text-sky-300">通灵佩饰库</div>
                   <div class="space-y-1.5 max-h-40 overflow-y-auto">
-                    ${(p.inventory.accessories||[]).map((ac,i)=>`<div class="flex justify-between items-center bg-stone-950 p-1.5 rounded"><div><span class="${ac.tier.colorClass}">${ac.name}</span></div><div class="space-x-1"><button onclick="equipItem('accessory',${i})" class="px-2 py-0.5 bg-stone-800 hover:bg-stone-700 rounded text-[10px]">佩戴</button><button onclick="recycleItem('accessory',${i})" class="px-2 py-0.5 bg-red-900 hover:bg-red-800 rounded text-[10px] text-white">回收</button></div></div>`).join('') || '<span class="text-[10px] text-stone-500">无备用饰品</span>'}
+                    ${p.inventory.accessories.map((ac,i)=>`<div class="flex justify-between items-center bg-stone-950 p-1.5 rounded"><div><span class="${ac.tier.colorClass}">${ac.name}</span></div><div class="space-x-1"><button onclick="equipItem('accessory',${i})" class="px-2 py-0.5 bg-stone-800 hover:bg-stone-700 rounded text-[10px]">佩戴</button><button onclick="recycleItem('accessory',${i})" class="px-2 py-0.5 bg-red-900 hover:bg-red-800 rounded text-[10px] text-white">回收</button></div></div>`).join('') || '<span class="text-[10px] text-stone-500">无备用饰品</span>'}
                   </div>
                 </div>
                 <div class="bg-stone-900 p-3 rounded border border-stone-800 space-y-2">
                   <div class="font-bold text-amber-300">随身灵丹阁</div>
                   <div class="space-y-1.5 max-h-40 overflow-y-auto">
-                    ${Object.keys(p.inventory.pills||{}).map((pKey)=>{
+                    ${Object.keys(p.inventory.pills).map((pKey,i)=>{
                       const pill = PILLS_DATABASE[pKey];
-                      if (!pill) return '';
                       const count = p.inventory.pills[pKey];
-                      return `<div class="flex justify-between items-center bg-stone-950 p-1.5 rounded"><div><span class="${pill.tier.colorClass}">${pill.name}</span> <span class="text-[9px] text-amber-400">x${count}</span></div><div class="space-x-1"><button onclick="usePill('${pKey}')" class="px-2 py-0.5 bg-amber-800 hover:bg-amber-700 rounded text-[10px]">服用</button><button onclick="recycleItem('pill','${pKey}')" class="px-2 py-0.5 bg-red-900 hover:bg-red-800 rounded text-[10px] text-white">回收</button></div></div>`;
+                      return `<div class="flex justify-between items-center bg-stone-950 p-1.5 rounded"><div><span class="${pill.tier.colorClass}">${pill.name}</span> <span class="text-[9px] text-amber-400">x${count}</span></div><div class="space-x-1"><button onclick="usePill('${pKey}')" class="px-2 py-0.5 bg-amber-800 hover:bg-amber-700 rounded text-[10px]">服用</button><button onclick="recycleItem('pill',${i})" class="px-2 py-0.5 bg-red-900 hover:bg-red-800 rounded text-[10px] text-white">回收</button></div></div>`;
                     }).join('') || '<span class="text-[10px] text-stone-500">无灵丹留存</span>'}
                   </div>
                 </div>
@@ -1654,27 +1491,27 @@
 
               <div class="grid grid-cols-1 sm:grid-cols-4 gap-3 text-xs pt-2">
                 <div class="bg-stone-900 p-3 rounded border border-stone-800 space-y-2">
-                  <div class="font-bold text-amber-300">未参悟秘籍功法 (${(p.inventory.manualBooks||[]).length})</div>
+                  <div class="font-bold text-amber-300">未参悟秘籍功法 (${p.inventory.manualBooks.length})</div>
                   <div class="space-y-1.5 max-h-32 overflow-y-auto">
-                    ${(p.inventory.manualBooks||[]).map((mb,i)=>`<div class="flex justify-between items-center bg-stone-950 p-1.5 rounded"><div><span class="${mb.tier.colorClass}">${mb.name}</span></div><button onclick="learnManualBook(${i})" class="px-2 py-0.5 bg-amber-800 hover:bg-amber-700 rounded text-[10px]">参悟</button></div>`).join('') || '<span class="text-[10px] text-stone-500">无多余功法书</span>'}
+                    ${p.inventory.manualBooks.map((mb,i)=>`<div class="flex justify-between items-center bg-stone-950 p-1.5 rounded"><div><span class="${mb.tier.colorClass}">${mb.name}</span></div><button onclick="learnManualBook(${i})" class="px-2 py-0.5 bg-amber-800 hover:bg-amber-700 rounded text-[10px]">参悟</button></div>`).join('') || '<span class="text-[10px] text-stone-500">无多余功法书</span>'}
                   </div>
                 </div>
                 <div class="bg-stone-900 p-3 rounded border border-stone-800 space-y-2">
-                  <div class="font-bold text-amber-300">未参悟杀伐武技 (${(p.inventory.skillBooks||[]).length})</div>
+                  <div class="font-bold text-amber-300">未参悟杀伐武技 (${p.inventory.skillBooks.length})</div>
                   <div class="space-y-1.5 max-h-32 overflow-y-auto">
-                    ${(p.inventory.skillBooks||[]).map((sb,i)=>`<div class="flex justify-between items-center bg-stone-950 p-1.5 rounded"><div><span class="${sb.tier.colorClass}">${sb.name}</span></div><button onclick="learnSkillBook(${i})" class="px-2 py-0.5 bg-amber-800 hover:bg-amber-700 rounded text-[10px]">参悟</button></div>`).join('') || '<span class="text-[10px] text-stone-500">无多余武技书</span>'}
+                    ${p.inventory.skillBooks.map((sb,i)=>`<div class="flex justify-between items-center bg-stone-950 p-1.5 rounded"><div><span class="${sb.tier.colorClass}">${sb.name}</span></div><button onclick="learnSkillBook(${i})" class="px-2 py-0.5 bg-amber-800 hover:bg-amber-700 rounded text-[10px]">参悟</button></div>`).join('') || '<span class="text-[10px] text-stone-500">无多余武技书</span>'}
                   </div>
                 </div>
                 <div class="bg-stone-900 p-3 rounded border border-stone-800 space-y-2">
-                  <div class="font-bold text-amber-300">未研习技艺书 (${(p.inventory.craftBooks||[]).length})</div>
+                  <div class="font-bold text-amber-300">未研习技艺书 (${p.inventory.craftBooks.length})</div>
                   <div class="space-y-1.5 max-h-32 overflow-y-auto">
-                    ${(p.inventory.craftBooks||[]).map((cb,i)=>`<div class="flex justify-between items-center bg-stone-950 p-1.5 rounded"><div><span class="text-amber-300">${cb.name}</span></div><button onclick="learnCraftBook(${i})" class="px-2 py-0.5 bg-amber-800 hover:bg-amber-700 rounded text-[10px]">研习</button></div>`).join('') || '<span class="text-[10px] text-stone-500">无多余技艺书</span>'}
+                    ${p.inventory.craftBooks.map((cb,i)=>`<div class="flex justify-between items-center bg-stone-950 p-1.5 rounded"><div><span class="text-amber-300">${cb.name}</span></div><button onclick="learnCraftBook(${i})" class="px-2 py-0.5 bg-amber-800 hover:bg-amber-700 rounded text-[10px]">研习</button></div>`).join('') || '<span class="text-[10px] text-stone-500">无多余技艺书</span>'}
                   </div>
                 </div>
                 <div class="bg-stone-900 p-3 rounded border border-stone-800 space-y-2">
-                  <div class="font-bold text-amber-300">灵兽笼神兽 (${(p.inventory.beasts||[]).length})</div>
+                  <div class="font-bold text-amber-300">灵兽笼神兽 (${p.inventory.beasts.length})</div>
                   <div class="space-y-1.5 max-h-32 overflow-y-auto">
-                    ${(p.inventory.beasts||[]).map((b,i)=>`<div class="flex justify-between items-center bg-stone-950 p-1.5 rounded"><div><span class="${b.tier.colorClass}">${b.name}</span> <span class="text-[9px] text-stone-400">(攻+${b.atk})</span></div><button onclick="deployBeast(${i})" class="px-2 py-0.5 bg-amber-800 hover:bg-amber-700 rounded text-[10px]">携带</button></div>`).join('') || '<span class="text-[10px] text-stone-500">无待携行神兽</span>'}
+                    ${p.inventory.beasts.map((b,i)=>`<div class="flex justify-between items-center bg-stone-950 p-1.5 rounded"><div><span class="${b.tier.colorClass}">${b.name}</span> <span class="text-[9px] text-stone-400">(攻+${b.atk})</span></div><button onclick="deployBeast(${i})" class="px-2 py-0.5 bg-amber-800 hover:bg-amber-700 rounded text-[10px]">携带</button></div>`).join('') || '<span class="text-[10px] text-stone-500">无待携行神兽</span>'}
                   </div>
                 </div>
               </div>
